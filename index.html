@@ -1,0 +1,1934 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Kit Consultor PERSE 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Plus+Jakarta+Sans:opsz,wght@8..24,300;8..24,400;8..24,500;8..24,600;8..24,700;8..24,800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+/* ── SHELL ── */
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:sans-serif;background:#080E18;color:#F8F4ED;margin:0;overflow:hidden}
+#shell{display:flex;flex-direction:column;height:100vh}
+#tab-bar{display:flex;background:#0D1520;border-bottom:2px solid #C8991A;flex-shrink:0;z-index:9999}
+.tab-btn{flex:1;padding:14px 10px;font-family:'Syne','Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:700;letter-spacing:1px;border:none;cursor:pointer;transition:all .2s;background:transparent;color:rgba(248,244,237,0.45);display:flex;align-items:center;justify-content:center;gap:8px}
+.tab-btn.active{color:#D4A017;background:rgba(200,153,26,0.09);border-bottom:3px solid #D4A017;margin-bottom:-2px}
+.tab-btn:hover:not(.active){color:#F8F4ED;background:rgba(255,255,255,0.03)}
+.tab-icon{font-size:18px}
+#content{flex:1;overflow:hidden;position:relative}
+.app-frame{position:absolute;inset:0;overflow:auto;display:none}
+.app-frame.active{display:block}
+
+/* ── BLUEBOOK STYLES ── */
+
+:root{
+  --ink:#0D1B2A;--ink2:#1a2e44;
+  --gold:#B8860B;--gold2:#D4A017;--gold3:#F0C040;
+  --cream:#FAF7F2;--cream2:#F2EDE4;--cream3:#E8E0D0;
+  --blue:#1B3A6B;--blue2:#2A4F8A;
+  --red:#8B2020;--green:#1A5C35;
+  --chapter1:#1B3A6B;--chapter2:#2D5A3D;--chapter3:#6B3A1B;
+  --chapter4:#3A1B6B;--chapter5:#1B5A6B;--chapter6:#5A1B3A;
+  --sidebar:260px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--cream);color:var(--ink);display:flex;min-height:100vh;font-size:16px;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+
+/* ── SIDEBAR ──────────────────────────────────── */
+.sidebar{
+  width:var(--sidebar);min-width:var(--sidebar);
+  background:var(--ink);
+  position:fixed;top:0;left:0;bottom:0;
+  overflow-y:auto;z-index:100;
+  display:flex;flex-direction:column;
+}
+.sb-brand{
+  padding:32px 28px 24px;
+  border-bottom:1px solid rgba(255,255,255,0.07);
+}
+.sb-logo{
+  font-family:'Playfair Display',serif;
+  font-size:22px;font-weight:700;color:var(--gold3);
+  line-height:1.2;margin-bottom:6px;
+}
+.sb-sub{font-size:10px;letter-spacing:3px;color:rgba(255,255,255,0.35);text-transform:uppercase}
+.sb-nav{padding:20px 0;flex:1}
+.sb-section-label{
+  font-size:9px;letter-spacing:4px;color:rgba(255,255,255,0.25);
+  text-transform:uppercase;padding:14px 28px 6px;
+}
+.sb-link{
+  display:flex;align-items:center;gap:14px;
+  padding:11px 28px;text-decoration:none;
+  font-size:13px;font-weight:500;color:rgba(255,255,255,0.5);
+  transition:all .2s;border-left:3px solid transparent;
+  position:relative;
+}
+.sb-link:hover{color:var(--gold3);background:rgba(255,255,255,0.04)}
+.sb-link.active{color:var(--gold3);border-left-color:var(--gold2);background:rgba(212,160,23,0.08)}
+.sb-num{
+  font-family:'DM Mono',monospace;font-size:10px;
+  color:rgba(255,255,255,0.2);min-width:20px;
+}
+.sb-link.active .sb-num{color:var(--gold2)}
+.sb-progress-wrap{padding:20px 28px;border-top:1px solid rgba(255,255,255,0.07)}
+.sb-progress-label{font-size:10px;letter-spacing:2px;color:rgba(255,255,255,0.3);text-transform:uppercase;margin-bottom:8px}
+.sb-progress-track{height:3px;background:rgba(255,255,255,0.08);border-radius:2px;overflow:hidden}
+.sb-progress-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold3));border-radius:2px;transition:width .4s ease;width:0%}
+.sb-progress-pct{font-family:'DM Mono',monospace;font-size:18px;color:var(--gold2);margin-top:8px;font-weight:500}
+
+/* ── MAIN ─────────────────────────────────────── */
+.main{margin-left:var(--sidebar);flex:1;min-height:100vh}
+
+/* ── COVER ────────────────────────────────────── */
+.cover{
+  min-height:100vh;
+  background:var(--ink);
+  position:relative;overflow:hidden;
+  display:grid;grid-template-columns:1fr 1fr;
+  align-items:stretch;
+}
+.cover-left{
+  padding:80px 70px;display:flex;flex-direction:column;
+  justify-content:center;position:relative;z-index:2;
+}
+.cover-edition{
+  font-family:'DM Mono',monospace;font-size:10px;
+  letter-spacing:4px;color:var(--gold2);
+  text-transform:uppercase;margin-bottom:40px;
+  display:flex;align-items:center;gap:12px;
+}
+.cover-edition::before{content:'';width:30px;height:1px;background:var(--gold2)}
+.cover-book-title{
+  font-family:'Playfair Display',serif;
+  font-size:80px;font-weight:700;line-height:.95;
+  color:var(--cream);letter-spacing:-2px;margin-bottom:0;
+}
+.cover-book-title .blue-word{color:var(--gold3)}
+.cover-rule{width:60px;height:2px;background:var(--gold2);margin:28px 0}
+.cover-subtitle{
+  font-family:'Playfair Display',serif;
+  font-size:22px;font-style:italic;color:rgba(250,247,242,0.65);
+  line-height:1.5;margin-bottom:48px;max-width:360px;
+}
+.cover-meta{
+  display:flex;flex-direction:column;gap:10px;
+}
+.cover-meta-item{
+  display:flex;align-items:center;gap:12px;
+  font-size:12px;letter-spacing:1px;color:rgba(250,247,242,0.4);
+}
+.cover-meta-item strong{color:var(--gold2);font-weight:600}
+.cover-right{
+  position:relative;overflow:hidden;
+  background:linear-gradient(135deg,#112848 0%,#1a3a6b 50%,#0d2040 100%);
+  display:flex;align-items:center;justify-content:center;
+}
+.cover-right-pattern{
+  position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(212,160,23,0.04) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(212,160,23,0.04) 1px,transparent 1px);
+  background-size:40px 40px;
+}
+.cover-visual{position:relative;z-index:2;text-align:center}
+.cover-big-zero{
+  font-family:'Playfair Display',serif;
+  font-size:200px;font-weight:700;
+  color:rgba(212,160,23,0.12);
+  line-height:1;position:absolute;
+  top:50%;left:50%;transform:translate(-50%,-50%);
+  pointer-events:none;
+}
+.cover-shield-wrap{
+  position:relative;z-index:3;
+  animation:float 5s ease-in-out infinite;
+}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-16px)}}
+.toc-chips{
+  display:flex;flex-wrap:wrap;gap:8px;margin-top:20px;
+}
+.toc-chip{
+  font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2.5px;font-weight:700;
+  padding:5px 12px;border:1px solid rgba(212,160,23,0.3);
+  color:var(--gold2);border-radius:100px;text-transform:uppercase;
+}
+
+/* ── CHAPTER WRAPPER ─────────────────────────── */
+.chapter{
+  min-height:100vh;padding:0;
+  scroll-margin-top:0;
+}
+
+/* ── CHAPTER HEADER ─────────────────────────── */
+.ch-header{
+  padding:80px 70px 60px;position:relative;overflow:hidden;
+}
+.ch-header::after{
+  content:'';position:absolute;bottom:0;left:70px;right:70px;
+  height:1px;background:var(--cream3);
+}
+.ch-number{
+  font-family:'Playfair Display',serif;
+  font-size:120px;font-weight:700;
+  line-height:1;
+  position:absolute;right:60px;top:40px;
+  opacity:0.06;
+}
+.ch-eyebrow{
+  font-family:'DM Mono',monospace;font-size:10px;
+  letter-spacing:4px;text-transform:uppercase;
+  margin-bottom:16px;display:flex;align-items:center;gap:12px;
+}
+.ch-eyebrow::before{content:'';width:24px;height:2px}
+.ch-title{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(42px,5vw,64px);font-weight:700;
+  line-height:1.05;margin-bottom:20px;
+}
+.ch-desc{
+  font-size:15px;color:#445;line-height:1.8;
+  max-width:600px;font-weight:400;
+}
+
+/* chapter color themes */
+.ch1 .ch-eyebrow{color:var(--chapter1)}.ch1 .ch-eyebrow::before{background:var(--chapter1)}.ch1 .ch-number{color:var(--chapter1)}.ch1 .ch-title{color:var(--chapter1)}
+.ch2 .ch-eyebrow{color:var(--chapter2)}.ch2 .ch-eyebrow::before{background:var(--chapter2)}.ch2 .ch-number{color:var(--chapter2)}.ch2 .ch-title{color:var(--chapter2)}
+.ch3 .ch-eyebrow{color:var(--chapter3)}.ch3 .ch-eyebrow::before{background:var(--chapter3)}.ch3 .ch-number{color:var(--chapter3)}.ch3 .ch-title{color:var(--chapter3)}
+.ch4 .ch-eyebrow{color:var(--chapter4)}.ch4 .ch-eyebrow::before{background:var(--chapter4)}.ch4 .ch-number{color:var(--chapter4)}.ch4 .ch-title{color:var(--chapter4)}
+.ch5 .ch-eyebrow{color:var(--chapter5)}.ch5 .ch-eyebrow::before{background:var(--chapter5)}.ch5 .ch-number{color:var(--chapter5)}.ch5 .ch-title{color:var(--chapter5)}
+.ch6 .ch-eyebrow{color:var(--chapter6)}.ch6 .ch-eyebrow::before{background:var(--chapter6)}.ch6 .ch-number{color:var(--chapter6)}.ch6 .ch-title{color:var(--chapter6)}
+.ch7 .ch-eyebrow{color:var(--gold)}.ch7 .ch-eyebrow::before{background:var(--gold)}.ch7 .ch-number{color:var(--gold)}.ch7 .ch-title{color:var(--gold)}
+
+/* ── CONTENT BODY ────────────────────────────── */
+.ch-body{padding:56px 70px}
+
+/* PULL QUOTE */
+.pullquote{
+  border-left:4px solid var(--gold2);
+  padding:24px 32px;margin:36px 0;
+  background:linear-gradient(90deg,rgba(212,160,23,0.06),transparent);
+}
+.pullquote p{
+  font-family:'Playfair Display',serif;
+  font-size:24px;font-style:italic;line-height:1.5;color:var(--ink);
+}
+.pullquote cite{font-size:11px;letter-spacing:2px;color:var(--gold);text-transform:uppercase;margin-top:10px;display:block}
+
+/* GRID */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin:28px 0}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;margin:28px 0}
+
+/* CARD */
+.card{
+  background:#fff;border-radius:12px;
+  border:1px solid var(--cream3);
+  padding:28px;
+  box-shadow:0 4px 20px rgba(13,27,42,0.06);
+}
+.card-accent{border-top:3px solid var(--gold2)}
+
+/* DARK CARD */
+.card-dark{
+  background:var(--ink);border-radius:12px;
+  padding:28px;color:var(--cream);
+}
+
+/* CONCEPT BOX */
+.concept{
+  display:flex;gap:20px;padding:20px 24px;
+  border-radius:10px;margin-bottom:16px;
+  border:1px solid var(--cream3);background:#fff;
+  align-items:flex-start;
+  transition:box-shadow .2s,transform .2s;
+}
+.concept:hover{box-shadow:0 8px 28px rgba(13,27,42,0.1);transform:translateY(-2px)}
+.concept-icon{
+  font-size:28px;width:52px;height:52px;
+  border-radius:12px;display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;background:var(--cream2);
+}
+.concept-title{font-size:15.5px;font-weight:700;margin-bottom:6px;color:var(--ink)}
+.concept-text{font-size:14px;color:#445;line-height:1.75;font-weight:400}
+
+/* STEP */
+.step-row{display:flex;gap:0;margin:28px 0;position:relative}
+.step-row::before{
+  content:'';position:absolute;top:24px;left:24px;
+  width:calc(100% - 48px);height:1px;
+  background:linear-gradient(90deg,var(--cream3),var(--cream3));
+  z-index:0;
+}
+.step{
+  flex:1;display:flex;flex-direction:column;align-items:center;
+  text-align:center;position:relative;z-index:1;padding:0 12px;
+}
+.step-circle{
+  width:48px;height:48px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Playfair Display',serif;
+  font-size:22px;font-weight:700;color:#fff;
+  margin-bottom:14px;box-shadow:0 4px 16px rgba(0,0,0,0.15);
+}
+.step-title{font-size:14px;font-weight:700;margin-bottom:6px;color:var(--ink)}
+.step-desc{font-size:11px;color:#778;line-height:1.4}
+
+/* SCRIPT BOX */
+.script{
+  background:var(--ink);border-radius:12px;
+  padding:32px;margin:28px 0;
+  position:relative;overflow:hidden;
+}
+.script::before{
+  content:'"';
+  font-family:'Playfair Display',serif;
+  font-size:120px;color:rgba(212,160,23,0.15);
+  position:absolute;top:-20px;left:20px;line-height:1;
+}
+.script-label{font-family:'Plus Jakarta Sans',sans-serif;font-size:10px;letter-spacing:3.5px;text-transform:uppercase;color:var(--gold2);margin-bottom:16px;font-weight:700}
+.script-text{
+  font-family:'Playfair Display',serif;
+  font-size:19px;font-style:italic;line-height:1.7;
+  color:var(--cream);position:relative;z-index:1;
+}
+.script-tip{
+  margin-top:20px;padding:12px 16px;
+  background:rgba(212,160,23,0.1);border-radius:8px;
+  font-size:12px;color:rgba(250,247,242,0.65);
+  border-left:2px solid var(--gold2);
+  position:relative;z-index:1;
+}
+.script-tip strong{color:var(--gold2)}
+
+/* OBJECTION CARD */
+.obj-card{
+  border-radius:12px;overflow:hidden;
+  margin-bottom:16px;
+  border:1px solid var(--cream3);
+  box-shadow:0 2px 12px rgba(13,27,42,0.05);
+}
+.obj-question{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:18px 24px;background:#fff;cursor:pointer;
+  transition:background .2s;user-select:none;
+}
+.obj-question:hover{background:var(--cream2)}
+.obj-q-text{
+  display:flex;align-items:center;gap:14px;
+  font-size:15px;font-weight:600;color:var(--red);
+}
+.obj-q-icon{font-size:18px}
+.obj-arrow{
+  font-size:12px;color:var(--gold);
+  transition:transform .3s;
+}
+.obj-card.open .obj-arrow{transform:rotate(180deg)}
+.obj-answer{
+  display:none;padding:20px 24px;
+  background:linear-gradient(135deg,#f8fff4,#f0f8f4);
+  border-top:1px solid rgba(26,92,53,0.1);
+}
+.obj-card.open .obj-answer{display:block}
+.obj-badge{
+  font-family:'DM Mono',monospace;font-size:9px;
+  letter-spacing:3px;text-transform:uppercase;
+  color:var(--green);margin-bottom:10px;
+}
+.obj-response{font-family:'Plus Jakarta Sans',sans-serif;font-size:15px;font-weight:500;font-style:normal;line-height:1.85;color:#155228;}
+.obj-note{font-size:13px;color:#445;margin-top:12px;line-height:1.7;font-weight:400}
+
+/* CNAE TABLE */
+.cnae-visual{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:14px;margin:28px 0;
+}
+.cnae-tile{
+  border-radius:14px;padding:22px 18px;
+  border:1px solid var(--cream3);background:#fff;
+  text-align:center;
+  transition:all .2s;cursor:default;
+}
+.cnae-tile:hover{transform:translateY(-4px);box-shadow:0 16px 32px rgba(13,27,42,0.1);border-color:var(--gold2)}
+.cnae-emoji{font-size:32px;display:block;margin-bottom:12px}
+.cnae-name{font-size:13px;font-weight:700;color:var(--ink);margin-bottom:4px}
+.cnae-code{font-family:'DM Mono',monospace;font-size:10px;color:#889;letter-spacing:1px}
+.cnae-pill{display:inline-block;margin-top:8px;padding:3px 10px;border-radius:100px;font-size:10px;font-weight:700;background:rgba(184,134,11,0.1);color:var(--gold);border:1px solid rgba(184,134,11,0.25)}
+
+/* STAT STRIP */
+.stat-strip{
+  display:flex;gap:0;background:var(--ink);
+  border-radius:12px;overflow:hidden;margin:28px 0;
+}
+.stat-item{
+  flex:1;padding:28px 24px;text-align:center;
+  border-right:1px solid rgba(255,255,255,0.07);
+}
+.stat-item:last-child{border-right:none}
+.stat-num{
+  font-family:'Playfair Display',serif;
+  font-size:48px;font-weight:700;color:var(--gold3);line-height:1;
+}
+.stat-label{font-size:11px;letter-spacing:2px;color:rgba(250,247,242,0.4);text-transform:uppercase;margin-top:4px}
+
+/* GOLD BOX */
+.gold-box{
+  background:linear-gradient(135deg,#3a2800,#5a4000);
+  border-radius:12px;padding:32px 36px;
+  margin:28px 0;border:1px solid rgba(212,160,23,0.3);
+  position:relative;overflow:hidden;
+}
+.gold-box::before{
+  content:'★';
+  font-size:120px;color:rgba(212,160,23,0.07);
+  position:absolute;right:-10px;top:-20px;line-height:1;
+}
+.gold-box-label{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:4px;color:var(--gold2);text-transform:uppercase;margin-bottom:12px}
+.gold-box-text{
+  font-family:'Playfair Display',serif;
+  font-size:22px;font-style:italic;color:var(--cream);line-height:1.6;
+  position:relative;z-index:1;
+}
+
+/* TECHNIQUE CARD */
+.technique{
+  background:#fff;border-radius:12px;
+  border-left:4px solid;padding:24px 28px;
+  margin-bottom:16px;
+  box-shadow:0 2px 12px rgba(13,27,42,0.05);
+}
+.technique-label{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:3px;text-transform:uppercase;margin-bottom:8px}
+.technique-title{font-size:16px;font-weight:700;margin-bottom:8px}
+.technique-text{font-size:14px;color:#445;line-height:1.75}
+.technique-example{margin-top:14px;padding:16px 20px;background:var(--cream2);border-radius:8px;font-family:'Plus Jakarta Sans',sans-serif;font-size:14.5px;font-weight:500;font-style:normal;color:var(--ink2);line-height:1.8;border-left:3px solid var(--gold2)}
+
+/* WHATSAPP BOX */
+.wa-box{
+  background:#E8F5E0;border-radius:12px;
+  padding:24px;margin:16px 0;
+  border:1px solid rgba(37,211,102,0.2);
+  position:relative;
+}
+.wa-box::before{content:'💬';position:absolute;top:16px;right:20px;font-size:20px}
+.wa-label{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#1a5c35;font-weight:700;margin-bottom:10px}
+.wa-text{font-size:15px;color:#1B2537;line-height:1.85;font-weight:400}
+
+/* MINDSET CARD */
+.mindset{
+  background:var(--ink2);border-radius:12px;
+  padding:28px 32px;color:var(--cream);
+  position:relative;overflow:hidden;
+}
+.mindset::after{
+  content:'';position:absolute;
+  right:-40px;top:-40px;width:160px;height:160px;
+  border-radius:50%;background:rgba(212,160,23,0.06);
+}
+.mindset-num{
+  font-family:'Playfair Display',serif;
+  font-size:60px;font-weight:700;color:var(--gold3);
+  line-height:1;margin-bottom:12px;opacity:.4;
+}
+.mindset-title{font-size:15px;font-weight:700;color:var(--gold3);margin-bottom:10px;letter-spacing:0.2px}
+.mindset-text{font-size:13.5px;color:rgba(250,247,242,0.7);line-height:1.7}
+
+/* SEPARATOR */
+.sep{
+  height:1px;background:var(--cream3);
+  margin:48px 0;position:relative;
+}
+.sep::after{
+  content:'◆';position:absolute;left:50%;top:-8px;transform:translateX(-50%);
+  color:var(--gold2);font-size:14px;background:var(--cream);padding:0 12px;
+}
+
+/* BODY TEXT */
+p.body{font-size:15.5px;line-height:1.85;color:#334;margin-bottom:20px}
+.lead{font-family:'Playfair Display',serif;font-size:21px;line-height:1.65;color:var(--ink);margin-bottom:28px;font-weight:700}
+
+/* TAG */
+.tag{display:inline-block;padding:3px 10px;border-radius:100px;font-size:11px;font-weight:600;letter-spacing:.5px}
+.tag-gold{background:rgba(184,134,11,0.12);color:var(--gold);border:1px solid rgba(184,134,11,0.25)}
+.tag-blue{background:rgba(27,58,107,0.1);color:var(--blue);border:1px solid rgba(27,58,107,0.2)}
+.tag-green{background:rgba(26,92,53,0.1);color:var(--green);border:1px solid rgba(26,92,53,0.2)}
+.tag-red{background:rgba(139,32,32,0.1);color:var(--red);border:1px solid rgba(139,32,32,0.2)}
+
+/* BONUS SECTION */
+.bonus-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin:28px 0}
+.phrase-card{
+  background:var(--ink);border-radius:12px;padding:24px;
+  border-bottom:3px solid var(--gold2);
+}
+.phrase-cat{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--gold2);margin-bottom:10px}
+.phrase-text{
+  font-family:'Playfair Display',serif;
+  font-size:18px;font-style:italic;color:var(--cream);line-height:1.5;
+}
+
+/* FINAL PAGE */
+.final{
+  background:var(--ink);min-height:100vh;
+  display:flex;align-items:center;justify-content:center;
+  text-align:center;padding:80px;
+  position:relative;overflow:hidden;
+}
+.final::before{
+  content:'';position:absolute;
+  top:50%;left:50%;transform:translate(-50%,-50%);
+  width:600px;height:600px;border-radius:50%;
+  background:radial-gradient(circle,rgba(212,160,23,0.08) 0%,transparent 70%);
+}
+.final-inner{position:relative;z-index:1}
+.final-oath{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(28px,3.5vw,44px);font-weight:700;
+  color:var(--cream);line-height:1.3;margin-bottom:28px;
+}
+.final-oath em{color:var(--gold3);font-style:normal}
+.final-sig{
+  display:inline-flex;align-items:center;gap:18px;
+  margin-top:48px;padding:20px 36px;
+  border:1px solid rgba(212,160,23,0.25);border-radius:100px;
+  background:rgba(212,160,23,0.05);
+}
+.final-av{width:48px;height:48px;border-radius:50%;background:var(--gold2);display:flex;align-items:center;justify-content:center;font-size:20px}
+.final-name{font-size:16px;font-weight:700;color:var(--cream)}
+.final-role{font-size:11px;color:var(--gold2);letter-spacing:2px}
+.final-companies{border-left:1px solid rgba(255,255,255,0.1);padding-left:18px;font-family:'DM Mono',monospace;font-size:11px;color:var(--gold2);letter-spacing:2px;line-height:1.8}
+
+/* SCROLL ANIMATIONS */
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s ease}
+.reveal.in{opacity:1;transform:none}
+
+</style>
+<style>
+/* ── PDCA STYLES (isolado) ── */
+#frame-pdca .app{display:grid;grid-template-columns:252px 1fr;min-height:100%}
+
+:root{
+  --bg:#080E18;--bg2:#0D1520;--bg3:#121C2E;--bg4:#182236;
+  --gold:#C8991A;--gold2:#E8B840;--gold3:#F5D060;
+  --p:#1A6B3A;--pg:#0d3a20;--p2:#2ECC71;
+  --d:#1B3A8B;--d2:#5BA3F5;
+  --c:#8B6B00;--c2:#F1C40F;
+  --a:#8B1A1A;--a2:#E74C3C;
+  --white:#F8F4ED;--stone:#8899AA;--muted:#4A5568;
+  --border:rgba(200,153,26,0.12);--border2:rgba(255,255,255,0.06);
+  --radius:10px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Instrument Sans',sans-serif;background:var(--bg);color:var(--white);min-height:100vh;font-size:15px;-webkit-font-smoothing:antialiased}
+.app{display:grid;grid-template-columns:252px 1fr;min-height:100vh}
+.sidebar{background:var(--bg2);border-right:1px solid var(--border);position:sticky;top:0;height:100vh;overflow-y:auto;display:flex;flex-direction:column}
+.sb-top{padding:26px 22px 18px;border-bottom:1px solid var(--border2)}
+.sb-logo{font-family:'Syne',sans-serif;font-size:11px;font-weight:800;letter-spacing:6px;color:var(--gold);text-transform:uppercase;margin-bottom:3px}
+.sb-tagline{font-size:11px;color:var(--stone)}
+.sb-nav{padding:14px 0;flex:1}
+.nav-gl{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:4px;color:var(--muted);text-transform:uppercase;padding:12px 22px 5px}
+.nav-item{display:flex;align-items:center;gap:11px;padding:10px 22px;font-size:13.5px;font-weight:500;color:var(--stone);cursor:pointer;transition:all .15s;border-left:3px solid transparent;user-select:none}
+.nav-item:hover{color:var(--white);background:rgba(255,255,255,0.03)}
+.nav-item.active{color:var(--gold2);border-left-color:var(--gold);background:rgba(200,153,26,0.07)}
+.nav-icon{font-size:15px;width:19px;text-align:center}
+.sb-stats{padding:16px 22px;border-top:1px solid var(--border2)}
+.ms{display:flex;justify-content:space-between;align-items:center;padding:5px 0}
+.ms-l{font-size:11px;color:var(--stone)}
+.ms-v{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600;color:var(--gold2)}
+.main{overflow-y:auto;min-height:100vh}
+.topbar{background:var(--bg2);border-bottom:1px solid var(--border);padding:14px 28px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50}
+.pt{font-family:'Syne',sans-serif;font-size:17px;font-weight:700}
+.ps{font-size:11px;color:var(--stone);margin-top:2px}
+.btn{display:inline-flex;align-items:center;gap:7px;padding:8px 16px;border-radius:var(--radius);font-size:13px;font-weight:600;cursor:pointer;border:none;transition:all .15s;font-family:'Instrument Sans',sans-serif}
+.btn-gold{background:var(--gold);color:var(--bg)}.btn-gold:hover{background:var(--gold2)}
+.btn-out{background:transparent;border:1px solid var(--border2);color:var(--stone)}.btn-out:hover{border-color:var(--gold);color:var(--gold)}
+.btn-sm{padding:5px 11px;font-size:12px}
+.btn-del{background:rgba(139,26,26,.18);border:1px solid rgba(139,26,26,.28);color:var(--a2)}.btn-del:hover{background:rgba(139,26,26,.32)}
+.view{display:none;padding:24px 28px 48px}.view.active{display:block}
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px}
+.kc{background:var(--bg3);border:1px solid var(--border2);border-radius:var(--radius);padding:18px;position:relative;overflow:hidden}
+.kc::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px}
+.kc-p::after{background:linear-gradient(90deg,var(--p),var(--p2))}
+.kc-d::after{background:linear-gradient(90deg,var(--d),var(--d2))}
+.kc-c::after{background:linear-gradient(90deg,var(--c),var(--c2))}
+.kc-a::after{background:linear-gradient(90deg,var(--a),var(--a2))}
+.kl{width:30px;height:30px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:14px;font-weight:800;color:#fff;margin-bottom:10px}
+.kl-p{background:var(--p)}.kl-d{background:var(--d)}.kl-c{background:var(--c)}.kl-a{background:var(--a)}
+.kv{font-family:'JetBrains Mono',monospace;font-size:34px;font-weight:600;line-height:1;color:var(--white);margin-bottom:3px}
+.kla{font-size:10px;color:var(--stone);letter-spacing:1px;text-transform:uppercase}
+.pbar{height:5px;background:rgba(255,255,255,0.05);border-radius:2px;margin-top:10px;overflow:hidden}
+.pbar-f{height:100%;border-radius:2px;transition:width .6s}
+.sec-t{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--white);letter-spacing:1px;margin-bottom:14px;display:flex;align-items:center;gap:10px}
+.sec-t::after{content:'';flex:1;height:1px;background:var(--border2)}
+.pipeline{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:28px}
+.pc-col{background:var(--bg3);border:1px solid var(--border2);border-radius:var(--radius);overflow:hidden}
+.pc-h{padding:11px 13px;display:flex;align-items:center;justify-content:space-between}
+.pc-label{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase}
+.pc-count{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700}
+.pc-body{padding:7px;min-height:72px}
+.pc-card{background:var(--bg4);border:1px solid var(--border2);border-radius:7px;padding:9px 11px;margin-bottom:5px;cursor:pointer;transition:all .15s}
+.pc-card:hover{border-color:rgba(200,153,26,.3);transform:translateY(-1px)}
+.pcc-name{font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:2px}
+.pcc-meta{font-size:10px;color:var(--stone)}
+.tier-badge{font-size:9.5px;font-weight:700;padding:2px 6px;border-radius:4px;display:inline-block;margin-top:3px}
+.filters{display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap}
+.fchip{padding:5px 13px;border-radius:100px;font-size:12px;font-weight:600;cursor:pointer;border:1px solid var(--border2);color:var(--stone);transition:all .15s}
+.fchip:hover{border-color:var(--gold);color:var(--gold)}
+.fchip.on{background:var(--gold);color:var(--bg);border-color:var(--gold)}
+.srch{flex:1;min-width:180px;background:var(--bg3);border:1px solid var(--border2);border-radius:var(--radius);padding:7px 13px;font-size:13px;color:var(--white);outline:none;font-family:'Instrument Sans',sans-serif}
+.srch:focus{border-color:var(--gold)}
+.pli{background:var(--bg3);border:1px solid var(--border2);border-radius:var(--radius);padding:14px 18px;margin-bottom:8px;display:grid;grid-template-columns:3fr 1fr 1fr 1fr auto;gap:14px;align-items:center;cursor:pointer;transition:all .15s}
+.pli:hover{border-color:var(--border);transform:translateX(2px)}
+.pli-co{font-size:14.5px;font-weight:600;margin-bottom:2px}
+.pli-me{font-size:11.5px;color:var(--stone)}
+.pli-se{font-size:11px;color:var(--gold)}
+.sbadge{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:100px;font-size:11px;font-weight:600;border:1px solid;white-space:nowrap}
+.s-plan{color:#5BA3F5;border-color:rgba(91,163,245,.3);background:rgba(91,163,245,.08)}
+.s-do{color:#F1C40F;border-color:rgba(241,196,15,.3);background:rgba(241,196,15,.08)}
+.s-check{color:#E8B840;border-color:rgba(232,184,64,.3);background:rgba(232,184,64,.08)}
+.s-win{color:#2ECC71;border-color:rgba(46,204,113,.3);background:rgba(46,204,113,.08)}
+.s-lost{color:#E74C3C;border-color:rgba(231,76,60,.3);background:rgba(231,76,60,.08)}
+.pm{height:4px;background:rgba(255,255,255,.05);border-radius:2px;width:78px;overflow:hidden}
+.pm-f{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--gold),var(--gold2))}
+.wizard{max-width:780px}
+.wsteps{display:flex;gap:0;margin-bottom:28px;border-radius:var(--radius);overflow:hidden;border:1px solid var(--border2)}
+.ws{flex:1;padding:13px 14px;text-align:center;cursor:pointer;transition:all .2s;border-right:1px solid var(--border2);opacity:.5}
+.ws:last-child{border-right:none}
+.ws.active{opacity:1;background:rgba(200,153,26,.08)}
+.ws.done{opacity:.75}
+.ws-ic{font-size:18px;margin-bottom:3px}
+.ws-lb{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:2px;text-transform:uppercase;color:var(--stone)}
+.ws-nm{font-size:12px;font-weight:700;color:var(--white);margin-top:2px}
+.ws.active .ws-lb{color:var(--gold)}
+.ws.done .ws-lb{color:var(--p2)}
+.fsec{background:var(--bg3);border:1px solid var(--border2);border-radius:var(--radius);padding:22px;margin-bottom:14px}
+.fsh{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid var(--border2)}
+.fg{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.fg3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.ff{grid-column:1/-1}
+.fgrp{display:flex;flex-direction:column;gap:5px}
+label{font-size:11px;font-weight:600;color:var(--stone);letter-spacing:.5px;text-transform:uppercase}
+input,select,textarea{background:var(--bg4);border:1px solid var(--border2);border-radius:7px;padding:9px 13px;font-size:13.5px;color:var(--white);outline:none;font-family:'Instrument Sans',sans-serif;transition:border-color .15s;width:100%}
+input:focus,select:focus,textarea:focus{border-color:var(--gold)}
+select option{background:var(--bg3)}
+textarea{resize:vertical;min-height:76px;line-height:1.6}
+.stars{display:flex;gap:3px;margin-top:5px}
+.star{font-size:26px;cursor:pointer;color:var(--muted);transition:color .12s;user-select:none}
+.star.on{color:var(--gold2)}
+.chkgp{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:5px}
+.chkopt{display:flex;align-items:center;gap:8px;padding:8px 11px;background:var(--bg4);border:1px solid var(--border2);border-radius:7px;cursor:pointer;transition:all .15s;font-size:13px;font-weight:400;letter-spacing:0;text-transform:none;color:var(--stone)}
+.chkopt:hover{border-color:var(--gold)}
+.chkopt input[type=checkbox]{width:15px;height:15px;accent-color:var(--gold);flex-shrink:0;cursor:pointer}
+.log-item{background:var(--bg4);border:1px solid var(--border2);border-radius:8px;padding:13px;margin-bottom:7px;position:relative}
+.log-row{display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:8px;margin-bottom:7px;align-items:end}
+.del-btn{width:28px;height:28px;border-radius:6px;background:rgba(139,26,26,.15);border:1px solid rgba(139,26,26,.2);color:var(--a2);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;transition:all .15s;flex-shrink:0}
+.del-btn:hover{background:rgba(139,26,26,.3)}
+.dh{background:var(--bg3);border:1px solid var(--border2);border-radius:var(--radius);padding:22px 26px;margin-bottom:18px}
+.dh-co{font-family:'Syne',sans-serif;font-size:22px;font-weight:800}
+.dh-se{font-size:13px;color:var(--gold);margin-top:3px}
+.dh-meta{display:flex;gap:14px;flex-wrap:wrap;margin-top:11px;padding-top:11px;border-top:1px solid var(--border2)}
+.dm{font-size:12px;color:var(--stone)}.dm strong{color:var(--white)}
+.ph-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px}
+.ph-card{background:var(--bg3);border:1px solid var(--border2);border-radius:var(--radius);overflow:hidden}
+.ph-head{padding:12px 14px;display:flex;align-items:center;gap:9px}
+.ph-lt{width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:13px;font-weight:800;color:#fff}
+.ph-tt{font-size:13px;font-weight:700}
+.ph-st{font-size:10px;color:var(--stone)}
+.ph-body{padding:13px 14px;font-size:12px;color:var(--stone);line-height:1.7}
+.ph-body strong{color:var(--white);display:block;font-size:12.5px;margin-top:6px;margin-bottom:1px}
+.ph-body strong:first-child{margin-top:0}
+.ltable{width:100%;border-collapse:collapse;font-size:12.5px}
+.ltable th{padding:7px 11px;text-align:left;font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--border2)}
+.ltable td{padding:9px 11px;border-bottom:1px solid rgba(255,255,255,.03)}
+.ltable tr:hover td{background:rgba(255,255,255,.02)}
+.empty{text-align:center;padding:60px 32px}
+.empty-ic{font-size:48px;margin-bottom:12px;opacity:.45}
+.empty-t{font-family:'Syne',sans-serif;font-size:17px;font-weight:700;color:var(--stone);margin-bottom:6px}
+.empty-s{font-size:13px;color:var(--muted)}
+.toast{position:fixed;bottom:22px;right:22px;padding:13px 18px;border-radius:var(--radius);font-size:13px;font-weight:600;z-index:9999;transform:translateY(16px);opacity:0;transition:all .25s;pointer-events:none}
+.toast.show{transform:translateY(0);opacity:1}
+.t-ok{background:var(--p);color:#fff;border:1px solid var(--p2)}
+.t-err{background:var(--a);color:#fff}
+@keyframes fi{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:translateY(0)}}
+.ani{animation:fi .28s ease both}
+
+</style>
+</head>
+<body>
+<div id="shell">
+  <div id="tab-bar">
+    <button class="tab-btn active" onclick="showApp('bb',this)" id="tab-bb">
+      <span class="tab-icon">📘</span> Bluebook do Consultor
+    </button>
+    <button class="tab-btn" onclick="showApp('pdca',this)" id="tab-pdca">
+      <span class="tab-icon">📊</span> Sistema PDCA
+    </button>
+  </div>
+  <div id="content">
+    <div class="app-frame active" id="frame-bb">
+      
+
+<!-- ── SIDEBAR ──────────────────────────────────── -->
+<aside class="sidebar">
+  <div class="sb-brand">
+    <div class="sb-logo">BLUE<br>BOOK</div>
+    <div class="sb-sub">Manual do Consultor · PERSE</div>
+  </div>
+  <nav class="sb-nav">
+    <div class="sb-section-label">Início</div>
+    <a class="sb-link active" href="#cover" onclick="setActive(this)"><span class="sb-num">00</span>Capa</a>
+    <div class="sb-section-label">Capítulos</div>
+    <a class="sb-link" href="#ch1" onclick="setActive(this)"><span class="sb-num">01</span>O Produto PERSE</a>
+    <a class="sb-link" href="#ch2" onclick="setActive(this)"><span class="sb-num">02</span>Clientes Prioritários</a>
+    <a class="sb-link" href="#ch3" onclick="setActive(this)"><span class="sb-num">03</span>Contato Frio/Morno/Quente</a>
+    <a class="sb-link" href="#ch4" onclick="setActive(this)"><span class="sb-num">04</span>Dissolução de Objeções</a>
+    <a class="sb-link" href="#ch5" onclick="setActive(this)"><span class="sb-num">05</span>O Fechamento</a>
+    <a class="sb-link" href="#ch6" onclick="setActive(this)"><span class="sb-num">06</span>Pós-Venda</a>
+    <a class="sb-link" href="#bonus" onclick="setActive(this)"><span class="sb-num">★</span>Frases de Ouro</a>
+    <a class="sb-link" href="#final" onclick="setActive(this)"><span class="sb-num">∞</span>Juramento</a>
+  </nav>
+  <div class="sb-progress-wrap">
+    <div class="sb-progress-label">Progresso de leitura</div>
+    <div class="sb-progress-track"><div class="sb-progress-fill" id="readProgress"></div></div>
+    <div class="sb-progress-pct" id="readPct">0%</div>
+  </div>
+</aside>
+
+<!-- ── MAIN ─────────────────────────────────────── -->
+<main class="main">
+
+<!-- COVER -->
+<section class="cover" id="cover">
+  <div class="cover-left">
+    <div class="cover-edition">Edição 2025 · Programa Emergencial de Retomada</div>
+    <h1 class="cover-book-title">BLUE<br><span class="blue-word">BOOK</span></h1>
+    <div class="cover-rule"></div>
+    <p class="cover-subtitle">O Manual Definitivo do Consultor de Elite em PERSE — Da Prospecção ao Fechamento.</p>
+    <div class="cover-meta">
+      <div class="cover-meta-item"><strong>Consultor:</strong> Especialista PERSE</div>
+      <div class="cover-meta-item"><strong>Programa:</strong> PERSE · Lei Federal 14.148/2021</div>
+      <div class="cover-meta-item"><strong>Validade:</strong> Campanha 2025 · Prazo Crítico</div>
+    </div>
+    <div class="toc-chips" style="margin-top:32px">
+      <div class="toc-chip">O Produto</div>
+      <div class="toc-chip">Clientes Prioritários</div>
+      <div class="toc-chip">Scripts Frio·Morno·Quente</div>
+      <div class="toc-chip">Dissolução de Objeções</div>
+      <div class="toc-chip">Fechamento</div>
+      <div class="toc-chip">Frases de Ouro</div>
+    </div>
+  </div>
+  <div class="cover-right">
+    <div class="cover-right-pattern"></div>
+    <div class="cover-big-zero">0%</div>
+    <div class="cover-visual">
+      <div class="cover-shield-wrap">
+        <svg width="280" height="340" viewBox="0 0 280 340" fill="none">
+          <path d="M140 16L264 68L264 192C264 270 140 328 140 328C140 328 16 270 16 192L16 68Z" fill="rgba(13,27,42,0.95)" stroke="rgba(212,160,23,0.5)" stroke-width="1.5"/>
+          <path d="M140 42L244 88L244 188C244 254 140 302 140 302C140 302 36 254 36 188L36 88Z" fill="rgba(212,160,23,0.06)" stroke="rgba(212,160,23,0.2)" stroke-width="1"/>
+          <ellipse cx="140" cy="178" rx="64" ry="78" fill="#162f54" stroke="rgba(212,160,23,0.4)" stroke-width="1.5"/>
+          <text x="140" y="170" text-anchor="middle" font-family="Playfair Display,Georgia,serif" font-size="22" font-weight="700" fill="#D4A017">PERSE</text>
+          <text x="140" y="192" text-anchor="middle" font-family="DM Mono,monospace" font-size="9" fill="rgba(212,160,23,0.6)" letter-spacing="4">2025</text>
+          <text x="140" y="210" text-anchor="middle" font-family="DM Mono,monospace" font-size="7.5" fill="rgba(212,160,23,0.4)" letter-spacing="2">ALÍQUOTA 0%</text>
+          <circle cx="80" cy="88" r="2.5" fill="rgba(212,160,23,0.5)"/>
+          <circle cx="198" cy="78" r="2" fill="rgba(212,160,23,0.4)"/>
+          <circle cx="60" cy="220" r="2" fill="rgba(212,160,23,0.35)"/>
+          <circle cx="216" cy="230" r="2.5" fill="rgba(212,160,23,0.5)"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     CAP 1 — O PRODUTO
+══════════════════════════════════════════════ -->
+<section class="chapter" id="ch1">
+  <div class="ch-header ch1">
+    <div class="ch-number">01</div>
+    <div class="ch-eyebrow">Capítulo 01 · Fundação</div>
+    <h2 class="ch-title">Você precisa dominar<br>o produto antes de vender.</h2>
+    <p class="ch-desc">Um consultor que não entende profundamente o que vende transmite insegurança. Um que domina, fecha. Este capítulo é o seu alicerce.</p>
+  </div>
+  <div class="ch-body">
+    <p class="lead reveal">O PERSE é o benefício fiscal mais poderoso disponível para empresas brasileiras dos setores de eventos, turismo, hotelaria e cultura. E poucos consultores o entendem de verdade.</p>
+
+    <div class="stat-strip reveal">
+      <div class="stat-item"><div class="stat-num">0%</div><div class="stat-label">Alíquota IRPJ</div></div>
+      <div class="stat-item"><div class="stat-num">0%</div><div class="stat-label">Alíquota CSLL</div></div>
+      <div class="stat-item"><div class="stat-num">0%</div><div class="stat-label">PIS + COFINS</div></div>
+      <div class="stat-item"><div class="stat-num">9,25%</div><div class="stat-label">Máx. de economia</div></div>
+    </div>
+
+    <div class="grid2">
+      <div>
+        <div class="concept reveal"><div class="concept-icon">📜</div><div><div class="concept-title">O que é o PERSE?</div><div class="concept-text">Programa Emergencial de Retomada do Setor de Eventos. Criado pela Lei 14.148/2021 para compensar as perdas da pandemia nos setores de eventos e hospitalidade.</div></div></div>
+        <div class="concept reveal"><div class="concept-icon">⚖️</div><div><div class="concept-title">Base legal sólida</div><div class="concept-text">Lei Federal, regulamentada por IN da Receita Federal. Não é uma interpretação — é um direito legalmente previsto para empresas elegíveis.</div></div></div>
+        <div class="concept reveal"><div class="concept-icon">📅</div><div><div class="concept-title">Vigência e prazo</div><div class="concept-text">O benefício tem duração definida. Cada mês sem adesão é um mês de economia perdida permanentemente. Urgência real, não de vendedor.</div></div></div>
+      </div>
+      <div>
+        <div class="card-dark reveal" style="height:100%">
+          <div style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:3px;color:var(--gold2);margin-bottom:20px;text-transform:uppercase">Os 4 impostos zerados</div>
+          <div style="display:grid;gap:16px">
+            <div style="padding:16px;background:rgba(255,255,255,0.05);border-radius:8px;border-left:3px solid var(--gold2)">
+              <div style="font-size:11px;letter-spacing:2px;color:rgba(250,247,242,0.4);text-transform:uppercase;margin-bottom:4px">IRPJ</div>
+              <div style="font-family:'Playfair Display',serif;font-size:36px;font-weight:700;color:var(--gold3);line-height:1">0%</div>
+              <div style="font-size:11px;color:rgba(250,247,242,0.35)">Imposto de Renda Pessoa Jurídica</div>
+            </div>
+            <div style="padding:16px;background:rgba(255,255,255,0.05);border-radius:8px;border-left:3px solid var(--gold2)">
+              <div style="font-size:11px;letter-spacing:2px;color:rgba(250,247,242,0.4);text-transform:uppercase;margin-bottom:4px">CSLL</div>
+              <div style="font-family:'Playfair Display',serif;font-size:36px;font-weight:700;color:var(--gold3);line-height:1">0%</div>
+              <div style="font-size:11px;color:rgba(250,247,242,0.35)">Contribuição Social s/ Lucro Líquido</div>
+            </div>
+            <div style="padding:16px;background:rgba(255,255,255,0.05);border-radius:8px;border-left:3px solid rgba(212,160,23,0.5)">
+              <div style="font-size:11px;letter-spacing:2px;color:rgba(250,247,242,0.4);text-transform:uppercase;margin-bottom:4px">PIS + COFINS</div>
+              <div style="font-family:'Playfair Display',serif;font-size:36px;font-weight:700;color:var(--gold3);line-height:1">0%</div>
+              <div style="font-size:11px;color:rgba(250,247,242,0.35)">Contribuições federais sobre receita</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pullquote reveal">
+      <p>"Você não está vendendo um serviço. Você está entregando dinheiro que a empresa já tem direito — mas ainda não sabe."</p>
+      <cite>Mindset do Consultor Elite · PERSE 2025</cite>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     CAP 2 — O CLIENTE IDEAL
+══════════════════════════════════════════════ -->
+<section class="chapter" id="ch2">
+  <div class="ch-header ch2">
+    <div class="ch-number">02</div>
+    <div class="ch-eyebrow">Capítulo 02 · Clientes Prioritários</div>
+    <h2 class="ch-title">Quanto maior o faturamento,<br>maior a oportunidade.</h2>
+    <p class="ch-desc">Foco em empresas de alto valor: Transportadoras, Indústrias, Segurança e Comerciais com faturamento acima de R$ 15 milhões/ano. Aqui estão os clientes que realmente movem o ponteiro.</p>
+  </div>
+  <div class="ch-body">
+    <p class="lead reveal">O critério número um é o faturamento. Quanto maior, maior o impacto do benefício — e maior a comissão. Foque nas empresas certas: Transportadoras, Indústrias, Empresas de Segurança e Comerciais com receita acima de R$ 15 milhões ao ano.</p>
+
+    <div class="step-row reveal">
+      <div class="step"><div class="step-circle" style="background:#7B1A1A">💎</div><div class="step-title">💎 Diamante · Acima de R$15M</div><div class="step-desc">Transportadoras, Indústrias, Segurança ou Comerciais com faturamento acima de R$ 15 milhões. Contato direto com sócio ou CFO. Prioridade máxima.</div></div>
+      <div class="step"><div class="step-circle" style="background:#7a5500">🥇</div><div class="step-title">🥇 Ouro · R$5M a R$15M</div><div class="step-desc">Mesmos setores com faturamento entre R$ 5M e R$ 15M. Alto potencial — abordagem personalizada com proposta em até 24h.</div></div>
+      <div class="step"><div class="step-circle" style="background:var(--green)">🥈</div><div class="step-title">🥈 Prata · R$1M a R$5M</div><div class="step-desc">Empresas menores dos setores-alvo. Faturamento entre R$ 1M e R$ 5M. Boa base — abordagem por e-mail e WhatsApp.</div></div>
+    </div>
+
+    <div class="sep"></div>
+
+    <div class="cnae-visual" style="grid-template-columns:repeat(2,1fr);gap:18px;margin-bottom:28px">
+      <div class="cnae-tile reveal" style="border-bottom:4px solid #7B1A1A;display:flex;align-items:flex-start;gap:16px;text-align:left;padding:24px 22px">
+        <span class="cnae-emoji" style="font-size:40px;flex-shrink:0">🚛</span>
+        <div>
+          <div class="cnae-name" style="font-size:16px;margin-bottom:6px">Transportadoras</div>
+          <div class="cnae-code" style="font-size:11px;line-height:1.5;color:#667">Frotas, cargas, logística, distribuição. Alto faturamento e carga tributária elevada. Decisor: sócio ou diretor financeiro.</div>
+          <span class="cnae-pill" style="margin-top:10px;background:rgba(123,26,26,0.12);color:#7B1A1A;border-color:rgba(123,26,26,0.3)">💎 Prioridade Máxima</span>
+        </div>
+      </div>
+      <div class="cnae-tile reveal" style="border-bottom:4px solid #1B3A6B;display:flex;align-items:flex-start;gap:16px;text-align:left;padding:24px 22px">
+        <span class="cnae-emoji" style="font-size:40px;flex-shrink:0">🏭</span>
+        <div>
+          <div class="cnae-name" style="font-size:16px;margin-bottom:6px">Indústrias</div>
+          <div class="cnae-code" style="font-size:11px;line-height:1.5;color:#667">Manufatura, produção, transformação. Ticket médio altíssimo. Quanto maior a planta, maior o benefício fiscal potencial.</div>
+          <span class="cnae-pill" style="margin-top:10px;background:rgba(27,58,107,0.1);color:#1B3A6B;border-color:rgba(27,58,107,0.25)">💎 Prioridade Máxima</span>
+        </div>
+      </div>
+      <div class="cnae-tile reveal" style="border-bottom:4px solid #1A5C35;display:flex;align-items:flex-start;gap:16px;text-align:left;padding:24px 22px">
+        <span class="cnae-emoji" style="font-size:40px;flex-shrink:0">🛡️</span>
+        <div>
+          <div class="cnae-name" style="font-size:16px;margin-bottom:6px">Empresas de Segurança</div>
+          <div class="cnae-code" style="font-size:11px;line-height:1.5;color:#667">Vigilância, monitoramento, escolta, rastreamento. Folha de pagamento pesada e faturamento recorrente. Excelente perfil.</div>
+          <span class="cnae-pill" style="margin-top:10px;background:rgba(26,92,53,0.1);color:#1A5C35;border-color:rgba(26,92,53,0.25)">🥇 Alta Prioridade</span>
+        </div>
+      </div>
+      <div class="cnae-tile reveal" style="border-bottom:4px solid #B8860B;display:flex;align-items:flex-start;gap:16px;text-align:left;padding:24px 22px">
+        <span class="cnae-emoji" style="font-size:40px;flex-shrink:0">🏪</span>
+        <div>
+          <div class="cnae-name" style="font-size:16px;margin-bottom:6px">Empresas Comerciais</div>
+          <div class="cnae-code" style="font-size:11px;line-height:1.5;color:#667">Distribuidoras, atacadistas, redes varejistas, importadoras. Volume de faturamento alto com tributos proporcionais.</div>
+          <span class="cnae-pill" style="margin-top:10px">🥇 Alta Prioridade</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card card-accent reveal" style="margin-top:8px">
+      <div style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:14px">🎯 Perfil do decisor ideal</div>
+      <div class="grid3">
+        <div><div style="font-size:13px;font-weight:700;margin-bottom:6px">Cargo certo</div><div style="font-size:12px;color:#556">Sócio, dono, CFO ou gerente financeiro. Evite recepcionistas — peça para falar com o responsável financeiro.</div></div>
+        <div><div style="font-size:13px;font-weight:700;margin-bottom:6px">Porte adequado</div><div style="font-size:12px;color:#556">Empresas com faturamento acima de R$100k/ano têm impacto relevante. Abaixo disso, priorize Tier 3.</div></div>
+        <div><div style="font-size:13px;font-weight:700;margin-bottom:6px">Sinal de abertura</div><div style="font-size:12px;color:#556">Responde no WhatsApp, atende ligações, demonstra interesse em reduzir custos. Esses fecham mais rápido.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     CAP 3 — A ABORDAGEM
+══════════════════════════════════════════════ -->
+<section class="chapter" id="ch3">
+  <div class="ch-header ch3">
+    <div class="ch-number">03</div>
+    <div class="ch-eyebrow">Capítulo 03 · A Arte do Contato</div>
+    <h2 class="ch-title">Não explique o produto.<br>Venda a reunião.</h2>
+    <p class="ch-desc">Seu único objetivo no primeiro contato é conquistar 20 minutos. Nada mais. Quem tenta explicar tudo no telefone perde o cliente antes de começar. Crie curiosidade. Provoque. Desapareça.</p>
+  </div>
+  <div class="ch-body">
+
+    <div class="pullquote reveal">
+      <p>"A curiosidade é a única emoção que obriga o ser humano a agir. Use-a como seu principal ativo comercial."</p>
+      <cite>Princípio do Consultor de Elite · Bluebook PERSE</cite>
+    </div>
+
+    <!-- REGRA MÁXIMA -->
+    <div class="gold-box reveal" style="margin-bottom:36px">
+      <div class="gold-box-label">⚠ A Regra de Ouro — nunca quebre esta</div>
+      <div class="gold-box-text">Você <strong style="color:var(--gold3)">jamais</strong> explica o produto por telefone, WhatsApp ou e-mail. Você só vende 20 minutos de atenção. Quem explica antecipado entrega poder ao cliente para dizer não sem nem te ver. O mistério correto gera reunião. A reunião gera fechamento.</div>
+    </div>
+
+    <!-- TEMPERATURA TABS -->
+    <div style="display:flex;gap:0;margin-bottom:32px;border-radius:12px;overflow:hidden;border:1px solid var(--cream3)" class="reveal">
+      <div onclick="showTemp('frio',this)" id="tab-frio" style="flex:1;padding:16px;background:var(--navy);color:var(--white);text-align:center;cursor:pointer;border-right:1px solid rgba(255,255,255,0.1);transition:all .2s">
+        <div style="font-size:22px;margin-bottom:6px">🧊</div>
+        <div style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:3px;color:rgba(248,244,237,0.5);text-transform:uppercase">Contato</div>
+        <div style="font-size:15px;font-weight:700;color:var(--white);margin-top:4px">Frio</div>
+        <div style="font-size:11px;color:rgba(248,244,237,0.4);margin-top:4px">Nunca falou com você</div>
+      </div>
+      <div onclick="showTemp('morno',this)" id="tab-morno" style="flex:1;padding:16px;background:var(--cream2);color:var(--ink);text-align:center;cursor:pointer;border-right:1px solid var(--cream3);transition:all .2s">
+        <div style="font-size:22px;margin-bottom:6px">🌡️</div>
+        <div style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:3px;color:var(--stone);text-transform:uppercase">Contato</div>
+        <div style="font-size:15px;font-weight:700;color:var(--ink);margin-top:4px">Morno</div>
+        <div style="font-size:11px;color:#778;margin-top:4px">Já teve algum contato</div>
+      </div>
+      <div onclick="showTemp('quente',this)" id="tab-quente" style="flex:1;padding:16px;background:var(--cream2);color:var(--ink);text-align:center;cursor:pointer;transition:all .2s">
+        <div style="font-size:22px;margin-bottom:6px">🔥</div>
+        <div style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:3px;color:var(--stone);text-transform:uppercase">Contato</div>
+        <div style="font-size:15px;font-weight:700;color:var(--ink);margin-top:4px">Quente</div>
+        <div style="font-size:11px;color:#778;margin-top:4px">Indicação direta</div>
+      </div>
+    </div>
+
+    <!-- FRIO -->
+    <div id="temp-frio" class="temp-panel">
+      <div style="display:inline-flex;align-items:center;gap:10px;padding:6px 16px;border-radius:100px;background:rgba(27,58,107,0.1);border:1px solid rgba(27,58,107,0.2);margin-bottom:24px">
+        <span style="font-size:16px">🧊</span>
+        <span style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:3px;color:var(--blue);text-transform:uppercase">Contato Frio — Nunca ouviu falar de você</span>
+      </div>
+
+      <div class="script reveal">
+        <div class="script-label">📞 Script Frio · Ligação · Ancoragem em empresa do mesmo setor</div>
+        <div class="script-text">"[Nome], boa tarde — [Seu Nome]. Você não me conhece ainda. Estou ligando porque a [Empresa Similar do Setor] — que tem um perfil muito parecido com o de vocês — passou por algo recentemente que mudou o resultado financeiro deles de forma bastante expressiva. Quando vi o porte da [Empresa de vocês], o primeiro pensamento foi: eles precisam saber disso também. Não consigo te explicar por telefone o que é, mas são 20 minutos — presencial ou vídeo. Quando você tem uma janela essa semana?"</div>
+        <div class="script-tip"><strong>Técnica — Espelho setorial:</strong> Mencionar uma empresa do mesmo setor cria identificação imediata. O cliente pensa: "Se funcionou pra eles, pode funcionar pra mim." Você não precisa inventar — use sempre empresas reais que já atendeu ou que conhece do mercado.</div>
+      </div>
+
+      <div style="background:rgba(27,58,107,0.06);border:1px solid rgba(27,58,107,0.12);border-radius:12px;padding:24px 28px;margin:0 0 24px" class="reveal">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:3px;color:var(--blue);text-transform:uppercase;margin-bottom:14px">🎯 3 variações de abertura por telefone — escolha a mais forte</div>
+        <div style="display:grid;gap:14px">
+
+          <div style="padding:22px 24px;background:#fff;border-radius:10px;border-left:5px solid var(--red);box-shadow:0 2px 12px rgba(13,27,42,0.07)">
+            <div style="font-family:'Plus Jakarta Sans',sans-serif;font-size:10px;letter-spacing:3px;color:var(--red);text-transform:uppercase;margin-bottom:10px;font-weight:700">▌ VARIAÇÃO A · EMPRESA EM COMUM</div>
+            <div style="font-family:'Plus Jakarta Sans',sans-serif;font-size:15.5px;font-weight:500;line-height:1.85;color:#1B2537;letter-spacing:-0.1px">"[Nome], a [Transportadora X] — que é do mesmo segmento que vocês — me pediu pra entrar em contato com você. Não vou explicar o motivo por telefone, mas eles acharam que você precisava saber o que descobriram. São 20 minutos. Quando pode?"</div>
+          </div>
+
+          <div style="padding:22px 24px;background:#fff;border-radius:10px;border-left:5px solid var(--blue);box-shadow:0 2px 12px rgba(13,27,42,0.07)">
+            <div style="font-family:'Plus Jakarta Sans',sans-serif;font-size:10px;letter-spacing:3px;color:var(--blue);text-transform:uppercase;margin-bottom:10px;font-weight:700">▌ VARIAÇÃO B · PESSOA EM COMUM</div>
+            <div style="font-family:'Plus Jakarta Sans',sans-serif;font-size:15.5px;font-weight:500;line-height:1.85;color:#1B2537;letter-spacing:-0.1px">"[Nome], bom dia. O [Nome em Comum] — que eu sei que vocês se conhecem — me sugeriu falar com você. Ele disse que do jeito que impactou a empresa dele, provavelmente faz sentido pra vocês também. Não é algo que eu consiga explicar agora, mas me dá 20 minutos e você entende por que ele pensou em você."</div>
+          </div>
+
+          <div style="padding:22px 24px;background:#fff;border-radius:10px;border-left:5px solid var(--gold);box-shadow:0 2px 12px rgba(13,27,42,0.07)">
+            <div style="font-family:'Plus Jakarta Sans',sans-serif;font-size:10px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:10px;font-weight:700">▌ VARIAÇÃO C · OPORTUNIDADE ÚNICA COM JANELA</div>
+            <div style="font-family:'Plus Jakarta Sans',sans-serif;font-size:15.5px;font-weight:500;line-height:1.85;color:#1B2537;letter-spacing:-0.1px">"[Nome], [Seu Nome]. Peço licença pra 60 segundos — encontrei a [Empresa] numa análise que fizemos do setor de [transporte/indústria/segurança] aqui da região. Há uma janela aberta agora que não vai ficar assim por muito tempo. Não posso detalhar por telefone — mas vale muito a pena os 20 minutos. Quando você pode essa semana?"</div>
+          </div>
+
+        </div>
+      </div>
+
+      <div style="background:rgba(139,32,32,0.05);border:1px solid rgba(139,32,32,0.12);border-radius:12px;padding:20px 24px;margin-bottom:24px" class="reveal">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:3px;color:var(--red);text-transform:uppercase;margin-bottom:12px">❌ O que NUNCA dizer no telefone frio</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+          <div style="padding:14px 16px;background:rgba(139,32,32,0.06);border-radius:8px;font-size:14px;color:#334;line-height:1.75;font-weight:400"><strong style="color:var(--red)">"Estou ligando para oferecer..."</strong><br>Soa como venda imediata. Cliente desliga.</div>
+          <div style="padding:14px 16px;background:rgba(139,32,32,0.06);border-radius:8px;font-size:14px;color:#334;line-height:1.75;font-weight:400"><strong style="color:var(--red)">"Temos uma solução que..."</strong><br>Genérico. Não cria nenhuma curiosidade.</div>
+          <div style="padding:14px 16px;background:rgba(139,32,32,0.06);border-radius:8px;font-size:14px;color:#334;line-height:1.75;font-weight:400"><strong style="color:var(--red)">"É uma oportunidade incrível..."</strong><br>Soa exagerado. Quebra credibilidade.</div>
+          <div style="padding:14px 16px;background:rgba(139,32,32,0.06);border-radius:8px;font-size:14px;color:#334;line-height:1.75;font-weight:400"><strong style="color:var(--red)">"Pode me dar 5 minutos?"</strong><br>5 minutos viram 40. Use "20 minutos" — é honesto e soa sério.</div>
+        </div>
+      </div>
+
+      <div class="script reveal" style="background:linear-gradient(135deg,#0d2a1a,#0a1f14)">
+        <div class="script-label" style="color:#2ECC71">💬 Script Frio · WhatsApp — Versão Direta</div>
+        <div class="script-text">"Boa tarde, [Nome]. Me chamo [Seu Nome]. Encontrei a [Empresa] e identifiquei algo que, dependendo do porte de vocês, pode mudar a conversa do financeiro. Não consigo explicar aqui — mas em 20 min te mostro com número na tela. Topa uma conversa essa semana?"</div>
+        <div class="script-tip"><strong>Regra:</strong> Mensagem curta, frase de impacto, call to action limpo. Nunca mande áudio no frio.</div>
+      </div>
+
+      <div class="script reveal" style="background:linear-gradient(135deg,#1a1200,#2a1e00)">
+        <div class="script-label" style="color:var(--gold2)">✉️ Script Frio · E-mail — Assunto: Encontrei algo sobre a [Empresa]</div>
+        <div class="script-text">"[Nome], tudo bem? Você não me conhece, mas analisei o perfil da [Empresa] e há um ponto específico no financeiro de vocês que merece uma conversa. Não vou explicar por e-mail — seria fazer um desserviço ao impacto real da informação. São 20 minutos. Quando posso te apresentar pessoalmente ou por vídeo?"</div>
+        <div class="script-tip"><strong>Assunto do e-mail:</strong> Nunca use "Oportunidade" ou "Proposta". Use sempre o nome da empresa ou algo pessoal: "Encontrei algo sobre a [Empresa]" ou "Uma pergunta, [Nome]".</div>
+      </div>
+
+      <div class="grid3" style="margin-top:8px">
+        <div class="mindset reveal"><div class="mindset-num">01</div><div class="mindset-title">Não se desculpe por ligar</div><div class="mindset-text">Confiança silenciosa é mais sedutora do que simpatia excessiva. Você tem algo valioso — aja assim.</div></div>
+        <div class="mindset reveal" style="transition-delay:.1s"><div class="mindset-num">02</div><div class="mindset-title">Provoque, não explique</div><div class="mindset-text">"Prefiro mostrar pessoalmente" cria mais urgência do que qualquer argumento técnico que você possa dar.</div></div>
+        <div class="mindset reveal" style="transition-delay:.2s"><div class="mindset-num">03</div><div class="mindset-title">Peça data, não permissão</div><div class="mindset-text">"Quando você tem 20 minutos?" é mais poderoso que "Você teria interesse em...?". Um pede agenda, o outro pede julgamento.</div></div>
+      </div>
+    </div>
+
+    <!-- MORNO -->
+    <div id="temp-morno" class="temp-panel" style="display:none">
+      <div style="display:inline-flex;align-items:center;gap:10px;padding:6px 16px;border-radius:100px;background:rgba(200,153,26,0.1);border:1px solid rgba(200,153,26,0.25);margin-bottom:24px">
+        <span style="font-size:16px">🌡️</span>
+        <span style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:3px;color:var(--gold);text-transform:uppercase">Contato Morno — Já se conhecem de alguma forma</span>
+      </div>
+
+      <div class="script reveal">
+        <div class="script-label">📞 Script Morno · Ligação · Com conexão prévia</div>
+        <div class="script-text">"[Nome], oi — [Seu Nome], a gente [se cruzou no evento X / está conectado no LinkedIn / falou rapidinho pelo [fulano]]. Fiquei pensando na [Empresa] depois disso — porque identifiquei algo que encaixa cirurgicamente no perfil de vocês. Não é o tipo de coisa que funciona pra qualquer empresa — mas pra uma [transportadora / indústria / empresa de segurança] do porte de vocês, o impacto é muito concreto. Me dá 20 minutos essa semana?"</div>
+        <div class="script-tip"><strong>Regra de ouro do morno:</strong> A conexão anterior é seu ativo mais valioso — use ela nos primeiros 10 segundos. Depois, "não funciona pra qualquer empresa" cria exclusividade. O cliente quer descobrir se ele se enquadra.</div>
+      </div>
+
+      <div style="background:rgba(27,58,107,0.06);border:1px solid rgba(27,58,107,0.12);border-radius:12px;padding:24px 28px;margin:0 0 24px" class="reveal">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:3px;color:var(--blue);text-transform:uppercase;margin-bottom:14px">🎯 Variações por tipo de conexão</div>
+        <div style="display:grid;gap:14px">
+
+          <div style="padding:18px 20px;background:#fff;border-radius:10px;border-left:4px solid var(--chapter2)">
+            <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:2.5px;font-weight:700;color:var(--chapter2);text-transform:uppercase;margin-bottom:8px">Após evento / feira do setor</div>
+            <div style="font-family:'Plus Jakarta Sans',sans-serif;font-size:15.5px;font-weight:500;line-height:1.85;color:#1B2537;letter-spacing:-0.1px">"[Nome], nos encontramos no [Evento] semana passada. Saí de lá pensando na [Empresa] — porque o que estou trabalhando agora tem uma aderência muito específica com empresas do perfil de vocês. Estou marcando reuniões curtas essa semana, 20 minutos. Quando você pode?"</div>
+          </div>
+
+          <div style="padding:22px 24px;background:#fff;border-radius:10px;border-left:5px solid var(--gold);box-shadow:0 2px 12px rgba(13,27,42,0.07)">
+            <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:2.5px;font-weight:700;color:var(--gold);text-transform:uppercase;margin-bottom:8px">Cliente antigo · Empresa diferente</div>
+            <div style="font-family:'Plus Jakarta Sans',sans-serif;font-size:15.5px;font-weight:500;line-height:1.85;color:#1B2537;letter-spacing:-0.1px">"[Nome], tudo bem? [Seu Nome] — a gente trabalhou junto quando você estava na [Empresa Anterior]. Fiquei sabendo que você está à frente da [Empresa Atual] agora — e o timing é perfeito, porque encontrei algo que é muito mais relevante pra esse porte do que era antes. Me dá 20 minutos?"</div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="script reveal" style="background:linear-gradient(135deg,#0d2a1a,#0a1f14)">
+        <div class="script-label" style="color:#2ECC71">💬 Script Morno · WhatsApp — Após primeiro contato sem resposta</div>
+        <div class="script-text">"[Nome], tudo bem? Te mandei uma mensagem antes. Não quero insistir à toa — mas o que tenho pra te mostrar tem uma janela de tempo. Empresas do porte da [Empresa] que passaram pelos últimos 3 meses sem saber disso deixaram dinheiro na mesa. Quando você tem 20 min essa semana?"</div>
+        <div class="script-tip"><strong>Regra do follow-up morno:</strong> Nunca pergunte "Viu minha mensagem?". Retome como se fosse um novo contato com nova informação de urgência.</div>
+      </div>
+
+      <div class="script reveal" style="background:linear-gradient(135deg,#1a1200,#2a1e00)">
+        <div class="script-label" style="color:var(--gold2)">✉️ Script Morno · E-mail — Pós-evento ou pós-LinkedIn</div>
+        <div class="script-text">"[Nome], foi ótimo [nos cruzarmos / ver seu perfil]. Fico pensando: uma empresa com o faturamento da [Empresa] no segmento de [transporte/indústria/segurança] provavelmente tem uma oportunidade que poucos enxergam agora. Não consigo detalhar aqui — mas em 20 minutos te mostro por que achei que você precisava ver isso. Quando posso?"</div>
+        <div class="script-tip"><strong>Nunca:</strong> mencione o produto. Nunca diga "benefício fiscal" ou "imposto". O intrigante é o que não é dito.</div>
+      </div>
+
+      <div class="grid3" style="margin-top:8px">
+        <div class="mindset reveal"><div class="mindset-num">01</div><div class="mindset-title">Use a conexão como âncora</div><div class="mindset-text">A familiaridade reduz resistência. Cite o contexto de vocês antes de qualquer argumento.</div></div>
+        <div class="mindset reveal" style="transition-delay:.1s"><div class="mindset-num">02</div><div class="mindset-title">Exclusividade seduz</div><div class="mindset-text">"Não funciona pra todo mundo" faz o cliente querer provar que ele se enquadra. Use sempre.</div></div>
+        <div class="mindset reveal" style="transition-delay:.2s"><div class="mindset-num">03</div><div class="mindset-title">Urgência sem pressão</div><div class="mindset-text">"Tem janela de tempo" cria urgência real sem soar desesperado. A diferença está no tom, não na palavra.</div></div>
+      </div>
+    </div>
+
+    <!-- QUENTE -->
+    <div id="temp-quente" class="temp-panel" style="display:none">
+      <div style="display:inline-flex;align-items:center;gap:10px;padding:6px 16px;border-radius:100px;background:rgba(139,32,32,0.08);border:1px solid rgba(139,32,32,0.2);margin-bottom:24px">
+        <span style="font-size:16px">🔥</span>
+        <span style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:3px;color:var(--red);text-transform:uppercase">Contato Quente — Indicação direta de alguém de confiança</span>
+      </div>
+
+      <div class="script reveal">
+        <div class="script-label">📞 Script Quente · Ligação · Indicação direta — versão principal</div>
+        <div class="script-text">"[Nome], boa tarde — [Seu Nome]. O [Quem Indicou] me pediu especificamente pra ligar pra você. Ele passou por algo nos últimos meses que impactou o resultado da empresa de forma bastante expressiva — e quando perguntei quem mais merecia conhecer isso, ele foi categórico: o [Nome]. Não vou te tomar tempo agora. São 20 minutos. Você vai entender exatamente por que ele pensou em você. Quando você pode essa semana?"</div>
+        <div class="script-tip"><strong>A força da indicação quente:</strong> O nome do indicador é um cheque em branco de confiança. Use-o no início, no meio e no fechamento. O cliente não quer decepcionar quem ele respeita.</div>
+      </div>
+
+      <div style="background:rgba(139,32,32,0.05);border:1px solid rgba(139,32,32,0.12);border-radius:12px;padding:24px 28px;margin:0 0 24px" class="reveal">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:3px;color:var(--red);text-transform:uppercase;margin-bottom:14px">🔥 Variações de abertura quente — por contexto</div>
+        <div style="display:grid;gap:14px">
+
+          <div style="padding:22px 24px;background:#fff;border-radius:10px;border-left:5px solid var(--red);box-shadow:0 2px 12px rgba(13,27,42,0.07)">
+            <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:2.5px;font-weight:700;color:var(--red);text-transform:uppercase;margin-bottom:8px">Quando o indicador já avisou o cliente</div>
+            <div style="font-family:'Plus Jakarta Sans',sans-serif;font-size:15.5px;font-weight:500;line-height:1.85;color:#1B2537;letter-spacing:-0.1px">"[Nome], o [Quem Indicou] deve ter te falado que eu ia ligar. Fico honrado com a confiança dele — e mais ainda em poder te apresentar o que apresentei a ele. O impacto foi grande o suficiente pra ele pedir que eu ligasse pessoalmente. São 20 minutos. Pode ser essa semana?"</div>
+          </div>
+
+          <div style="padding:22px 24px;background:#fff;border-radius:10px;border-left:5px solid var(--gold);box-shadow:0 2px 12px rgba(13,27,42,0.07)">
+            <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:2.5px;font-weight:700;color:var(--gold);text-transform:uppercase;margin-bottom:8px">Quando a indicação é de um concorrente direto</div>
+            <div style="font-family:'Plus Jakarta Sans',sans-serif;font-size:15.5px;font-weight:500;line-height:1.85;color:#1B2537;letter-spacing:-0.1px">"[Nome], bom dia. Vou ser direto: a [Empresa Concorrente] — que eu sei que vocês conhecem bem — acabou de passar por algo que mudou a conversa financeira deles. O [nome lá de dentro] me disse: fala com a [Empresa de vocês] antes que alguém fale primeiro. Quando posso te mostrar em 20 minutos?"</div>
+          </div>
+
+          <div style="padding:18px 20px;background:#fff;border-radius:10px;border-left:4px solid var(--chapter2)">
+            <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--chapter2);text-transform:uppercase;margin-bottom:8px">Quando o cliente é do mesmo grupo / holding</div>
+            <div style="font-family:'Plus Jakarta Sans',sans-serif;font-size:15.5px;font-weight:500;line-height:1.85;color:#1B2537;letter-spacing:-0.1px">"[Nome], [Seu Nome]. A [Empresa do Grupo] já está avançando com isso — e o [Nome do Sócio/Diretor] sugeriu que eu falasse com você antes de seguirmos. Faz sentido que as empresas do grupo caminhem juntas nesse momento. São 20 minutos pra alinhar. Quando pode?"</div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="gold-box reveal" style="margin-bottom:4px">
+        <div class="gold-box-label">💡 A regra de ouro do contato quente</div>
+        <div class="gold-box-text">"Anuncie a ligação antes de fazer. Mande uma mensagem no dia anterior: 'Amanhã às 10h vou te ligar — o [Nome] pediu.' A taxa de atendimento é 3x maior quando o cliente espera sua ligação. Respeito pelo tempo dele — e preparo para o seu."</div>
+      </div>
+
+      <div class="script reveal" style="background:linear-gradient(135deg,#0d2a1a,#0a1f14)">
+        <div class="script-label" style="color:#2ECC71">💬 Script Quente · WhatsApp — Pré-aquecimento antes da ligação</div>
+        <div class="script-text">"Boa tarde, [Nome]! Me chamo [Seu Nome]. O [Quem Indicou] me sugeriu falar com você. Ele disse que você é exatamente o tipo de empresário que deveria conhecer o que estou trabalhando agora. Não consigo explicar aqui — mas em 20 min você entende tudo. Vou te ligar amanhã às [horário] — pode ser?"</div>
+        <div class="script-tip"><strong>Dica:</strong> Anuncie a ligação antes de fazer. A taxa de atendimento sobe 3x quando o cliente espera sua ligação.</div>
+      </div>
+
+      <div class="script reveal" style="background:linear-gradient(135deg,#1a1200,#2a1e00)">
+        <div class="script-label" style="color:var(--gold2)">✉️ Script Quente · E-mail — Quando a indicação já apresentou você</div>
+        <div class="script-text">"[Nome], o [Quem Indicou] já deve ter te falado sobre mim. Fico honrado com a confiança dele — e mais ainda em poder te apresentar o que apresentei a ele. O impacto foi suficiente para ele pedir que eu te ligasse pessoalmente. São 20 minutos. Pode ser na próxima semana?"</div>
+        <div class="script-tip"><strong>Regra quente:</strong> Nunca chegue apressado. No contato quente, a confiança já está pré-estabelecida. Você pode se dar ao luxo de ser mais calmo e direto.</div>
+      </div>
+
+      <div class="grid3" style="margin-top:8px">
+        <div class="mindset reveal"><div class="mindset-num">01</div><div class="mindset-title">O nome do indicador é sua senha</div><div class="mindset-text">Abra com ele e feche com ele. É a ponte de confiança mais sólida que existe em vendas.</div></div>
+        <div class="mindset reveal" style="transition-delay:.1s"><div class="mindset-num">02</div><div class="mindset-title">Anuncie a ligação</div><div class="mindset-text">Mande mensagem antes: "Vou te ligar amanhã às X". A taxa de atendimento triplica. Respeito pelo tempo do cliente.</div></div>
+        <div class="mindset reveal" style="transition-delay:.2s"><div class="mindset-num">03</div><div class="mindset-title">Postura de abundância</div><div class="mindset-text">No contato quente você não precisa vender — você precisa apresentar. A confiança já foi transferida pelo indicador.</div></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     CAP 4 — OBJEÇÕES
+══════════════════════════════════════════════ -->
+<section class="chapter" id="ch4">
+  <div class="ch-header ch4">
+    <div class="ch-number">04</div>
+    <div class="ch-eyebrow">Capítulo 04 · Controle Total</div>
+    <h2 class="ch-title">Objeção é o cliente<br>pedindo para ser convencido.</h2>
+    <p class="ch-desc">O melhor comercial do mundo não rebate objeções — ele as dissolve. Com empatia cirúrgica, pausa estratégica e o redirecionamento certo, cada objeção vira degrau para o fechamento.</p>
+  </div>
+  <div class="ch-body">
+
+    <div class="pullquote reveal">
+      <p>"Nunca lute contra uma objeção. Dance com ela. Quem empurra, afasta. Quem conduz, fecha."</p>
+      <cite>Técnica de Dissolução de Objeções · Nível Elite</cite>
+    </div>
+
+    <!-- FRAMEWORK -->
+    <div class="card card-accent reveal" style="margin-bottom:28px">
+      <div style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:16px">O Framework E·V·R·A — Para toda objeção</div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:0;border-radius:10px;overflow:hidden;border:1px solid var(--cream3)">
+        <div style="padding:18px 16px;background:var(--navy);text-align:center"><div style="font-family:'Playfair Display',serif;font-size:32px;font-weight:700;color:var(--gold3)">E</div><div style="font-size:12px;font-weight:700;color:var(--white);margin-top:6px">Empatia</div><div style="font-size:10px;color:rgba(250,247,242,0.5);margin-top:4px">"Faz todo sentido pensar assim..."</div></div>
+        <div style="padding:18px 16px;background:#112030;text-align:center"><div style="font-family:'Playfair Display',serif;font-size:32px;font-weight:700;color:var(--gold3)">V</div><div style="font-size:12px;font-weight:700;color:var(--white);margin-top:6px">Validação</div><div style="font-size:10px;color:rgba(250,247,242,0.5);margin-top:4px">"Outros empresários pensaram o mesmo..."</div></div>
+        <div style="padding:18px 16px;background:var(--navy);text-align:center"><div style="font-family:'Playfair Display',serif;font-size:32px;font-weight:700;color:var(--gold3)">R</div><div style="font-size:12px;font-weight:700;color:var(--white);margin-top:6px">Redirecionamento</div><div style="font-size:10px;color:rgba(250,247,242,0.5);margin-top:4px">"E mesmo assim... / E exatamente por isso..."</div></div>
+        <div style="padding:18px 16px;background:#112030;text-align:center"><div style="font-family:'Playfair Display',serif;font-size:32px;font-weight:700;color:var(--gold3)">A</div><div style="font-size:12px;font-weight:700;color:var(--white);margin-top:6px">Ação</div><div style="font-size:10px;color:rgba(250,247,242,0.5);margin-top:4px">"Quando posso te mostrar isso?"</div></div>
+      </div>
+    </div>
+
+    <!-- OBJECTIONS -->
+
+    <div class="obj-card reveal" onclick="toggleObj(this)">
+      <div class="obj-question">
+        <div class="obj-q-text"><span class="obj-q-icon">❌</span>"Não tenho interesse."</div><div class="obj-arrow">▼</div>
+      </div>
+      <div class="obj-answer">
+        <div class="obj-badge">✓ Resposta Elite — Padrão de interrupção</div>
+        <div class="obj-response">"[Nome], entendo. Mas me permite uma pergunta — você está sem interesse no assunto, ou sem interesse em marcar 20 minutos?" [pausa] "Porque se for tempo, eu entendo completamente. Se for o assunto... aí eu precisaria te contar o que encontrei sobre a [Empresa] para você poder ter uma opinião real. Você me dá esse espaço?"</div>
+        <div class="obj-note"><strong>Técnica — Separação de Objeções:</strong> O cliente diz "não tenho interesse" mas muitas vezes significa "não tenho tempo" ou "não sei o que é". Separe as duas coisas. Você ganha permissão para continuar sem confrontar.</div>
+      </div>
+    </div>
+
+    <div class="obj-card reveal" onclick="toggleObj(this)">
+      <div class="obj-question">
+        <div class="obj-q-text"><span class="obj-q-icon">❌</span>"Manda por e-mail que eu vejo."</div><div class="obj-arrow">▼</div>
+      </div>
+      <div class="obj-answer">
+        <div class="obj-badge">✓ Resposta Elite — Inversão de controle</div>
+        <div class="obj-response">"Eu poderia mandar, [Nome] — mas aí eu estaria te fazendo um desserviço. O que tenho não é um PDF de proposta. É uma análise personalizada da situação da [Empresa] que só faz sentido ao vivo, com os números corretos na frente. Por e-mail você ia ler fora de contexto e ia parecer menos do que é. Não quero desperdiçar sua atenção assim. Me dá 20 minutos — presencial ou vídeo — e aí você julga com as informações completas."</div>
+        <div class="obj-note"><strong>Técnica — Proteção de valor:</strong> Você não está recusando mandar e-mail. Você está protegendo a qualidade da experiência do cliente. Isso soa sofisticado, não arrogante.</div>
+      </div>
+    </div>
+
+    <div class="obj-card reveal" onclick="toggleObj(this)">
+      <div class="obj-question">
+        <div class="obj-q-text"><span class="obj-q-icon">❌</span>"Já tenho contador / advogado tributarista."</div><div class="obj-arrow">▼</div>
+      </div>
+      <div class="obj-answer">
+        <div class="obj-badge">✓ Resposta Elite — Elogio + Cunha</div>
+        <div class="obj-response">"Ótimo — isso só me diz que você já valoriza ter assessoria especializada. Eu não venho substituir ninguém. Mas deixa eu te fazer uma pergunta direta: seu contador ou advogado te trouxe nos últimos 6 meses uma proposta proativa de redução fiscal específica para o porte de vocês?" [pausa para resposta] "É exatamente esse espaço que eu ocupo. São 20 minutos — e se seu time já sabe de tudo que vou mostrar, você me dispensa na hora."</div>
+        <div class="obj-note"><strong>Técnica — Desafio invertido:</strong> Você transforma a objeção em uma pergunta que o próprio cliente não sabe responder. Isso cria a brecha sem atacar o profissional de confiança dele.</div>
+      </div>
+    </div>
+
+    <div class="obj-card reveal" onclick="toggleObj(this)">
+      <div class="obj-question">
+        <div class="obj-q-text"><span class="obj-q-icon">❌</span>"Agora não é o momento. Empresa está num momento difícil."</div><div class="obj-arrow">▼</div>
+      </div>
+      <div class="obj-answer">
+        <div class="obj-badge">✓ Resposta Elite — Virada de frame</div>
+        <div class="obj-response">"[Nome], entendo — e por isso mesmo quero falar com você agora, não daqui 3 meses." [pausa] "O que tenho pra mostrar é exatamente pro momento difícil. Não é um custo novo — é o oposto. Empresas que passaram por aperto nos últimos 2 anos e descobriram isso saíram na frente justamente porque precisavam. Quando o barco está pesado, você alivia o peso — não espera o mar melhorar. Me dá 20 minutos?"</div>
+        <div class="obj-note"><strong>Técnica — Reframe de urgência:</strong> O momento difícil vira argumento a favor, não contra. Você usa a dor atual como alavanca. Isso é altamente persuasivo porque é verdadeiro.</div>
+      </div>
+    </div>
+
+    <div class="obj-card reveal" onclick="toggleObj(this)">
+      <div class="obj-question">
+        <div class="obj-q-text"><span class="obj-q-icon">❌</span>"Vou pensar e te retorno."</div><div class="obj-arrow">▼</div>
+      </div>
+      <div class="obj-answer">
+        <div class="obj-badge">✓ Resposta Elite — Ancoragem de data</div>
+        <div class="obj-response">"Claro, [Nome] — você não precisa decidir nada agora. Mas me permite te fazer uma última pergunta?" [pausa e aguarde o sim] "O que ainda está faltando de informação pra você tomar essa decisão de agendar 20 minutos?" [ouça com atenção] [Depois de ouvir:] "Faz sentido. Então que tal a gente falar na [dia específico, ex: quinta-feira às 10h]? Coloco na agenda e te mando confirmação agora."</div>
+        <div class="obj-note"><strong>Técnica — Pergunta de diagnóstico + ancoragem:</strong> "O que está faltando?" revela a objeção real. Depois, você não pede permissão — você propõe uma data específica. Datas específicas fecham agenda; perguntas abertas não.</div>
+      </div>
+    </div>
+
+    <div class="obj-card reveal" onclick="toggleObj(this)">
+      <div class="obj-question">
+        <div class="obj-q-text"><span class="obj-q-icon">❌</span>"Já conheço esse tipo de coisa, já me ofereceram antes."</div><div class="obj-arrow">▼</div>
+      </div>
+      <div class="obj-answer">
+        <div class="obj-badge">✓ Resposta Elite — Diferenciação sem comparação</div>
+        <div class="obj-response">"Entendo completamente — e te dou razão, muita coisa parecida circula por aí." [pausa] "Mas [Nome], se você já conhece, me diz uma coisa: você já chegou a ver aplicado num número concreto, com o faturamento específico da [Empresa]?" [aguarde] "É isso que muda tudo. Não é o conceito — é o seu número. São 20 minutos pra você ver o impacto no contexto real de vocês. Aí você compara com tudo que já viu antes e me diz o que acha."</div>
+        <div class="obj-note"><strong>Técnica — Personalização como diferencial:</strong> Você não briga com o passado do cliente. Você oferece algo que ninguém ofereceu: o número real dele. Isso é irrecusável.</div>
+      </div>
+    </div>
+
+    <div class="obj-card reveal" onclick="toggleObj(this)">
+      <div class="obj-question">
+        <div class="obj-q-text"><span class="obj-q-icon">❌</span>"Quanto custa? Me fala o preço primeiro."</div><div class="obj-arrow">▼</div>
+      </div>
+      <div class="obj-answer">
+        <div class="obj-badge">✓ Resposta Elite — Inversão valor-preço</div>
+        <div class="obj-response">"[Nome], eu adoraria te dar esse número — mas seria desonesto da minha parte te falar o preço sem você saber o que recebe em troca." [pausa] "Pensa comigo: se eu te dissesse agora que custa R$ 50 mil, você ia dizer caro ou barato?" [aguarde] "Exato — você não sabe ainda. Mas se eu te mostrar que o retorno estimado é de R$ 800 mil, aí o R$ 50 mil tem outro nome. É investimento, não custo. Me dá os 20 minutos — aí você tem o número completo pra comparar."</div>
+        <div class="obj-note"><strong>Técnica — Ancoragem de retorno:</strong> Nunca fale de preço antes de estabelecer valor. Use um número hipotético pra criar o contraste. O cliente ri ou concorda — e você segue.</div>
+      </div>
+    </div>
+
+    <div class="obj-card reveal" onclick="toggleObj(this)">
+      <div class="obj-question">
+        <div class="obj-q-text"><span class="obj-q-icon">❌</span>"Não tenho tempo agora."</div><div class="obj-arrow">▼</div>
+      </div>
+      <div class="obj-answer">
+        <div class="obj-badge">✓ Resposta Elite — Respeito + Comprometimento futuro</div>
+        <div class="obj-response">"[Nome], respeito demais seu tempo — é por isso que não vou te tomar mais de 2 minutos agora. Só me diz: qual o melhor dia pra semana que vem? Pode ser cedo da manhã, pode ser no final do dia. Você escolhe o horário e eu me adapto. Mando confirmação e não te incomodo mais até lá."</div>
+        <div class="obj-note"><strong>Técnica — Transferência de controle:</strong> Você não insiste — você cede o controle do horário. Isso elimina a resistência porque o cliente sente que está escolhendo, não sendo pressionado.</div>
+      </div>
+    </div>
+
+    <div class="obj-card reveal" onclick="toggleObj(this)">
+      <div class="obj-question">
+        <div class="obj-q-text"><span class="obj-q-icon">❌</span>"Isso parece bom demais para ser verdade."</div><div class="obj-arrow">▼</div>
+      </div>
+      <div class="obj-answer">
+        <div class="obj-badge">✓ Resposta Elite — Concordância + Prova de contexto</div>
+        <div class="obj-response">"[Nome], te dou razão — eu pensaria o mesmo." [pausa longa] "Sabe o que me convenceu? Não foi a explicação. Foi ver o número com o CNPJ de uma empresa real numa tela. Antes disso, eu também seria cético." [pausa] "É exatamente por isso que eu não explico por telefone. Porque falado soa promessa. Documentado, com a legislação aberta na sua frente, é outra conversa. São 20 minutos. O ceticismo você pode trazer junto — eu prefiro assim."</div>
+        <div class="obj-note"><strong>Técnica — Espelho de ceticismo:</strong> Você concorda com a desconfiança do cliente e usa isso como prova de que você também passou pelo mesmo processo. Isso humaniza e cria identidade compartilhada.</div>
+      </div>
+    </div>
+
+    <!-- GOLD BOX FINAL -->
+    <div class="gold-box reveal" style="margin-top:8px">
+      <div class="gold-box-label">⚡ A frase que dissolve qualquer objeção</div>
+      <div class="gold-box-text">"[Nome], eu entendo. E por isso mesmo — não estou pedindo que você compre nada. Estou pedindo 20 minutos pra você ter a informação completa e decidir com clareza. Só isso."</div>
+    </div>
+
+  </div>
+</section>
+
+<section class="chapter" id="ch5">
+  <div class="ch-header ch5">
+    <div class="ch-number">05</div>
+    <div class="ch-eyebrow">Capítulo 05 · Decisão</div>
+    <h2 class="ch-title">Quem fecha, pergunta.<br>Quem espera, perde.</h2>
+    <p class="ch-desc">O fechamento não é o fim da conversa — é uma pergunta bem colocada no momento certo. Aprenda as técnicas e a leitura dos sinais.</p>
+  </div>
+  <div class="ch-body">
+    <p class="lead reveal">O maior erro de um consultor é esperar que o cliente diga "quero comprar". Isso nunca acontece. Você precisa conduzir à decisão com naturalidade e confiança.</p>
+
+    <div class="technique reveal" style="border-color:var(--chapter5)">
+      <div class="technique-label" style="color:var(--chapter5)">Técnica 01 · O Fechamento por Alternativa</div>
+      <div class="technique-title">Não pergunte se — pergunte qual.</div>
+      <div class="technique-text">Ofereça duas opções, ambas levando ao sim. O cliente escolhe entre elas — não entre sim e não.</div>
+      <div class="technique-example">"Você prefere que a gente formalize essa semana ou deixamos para a semana que vem? — só lembrando que cada mês conta."</div>
+    </div>
+
+    <div class="technique reveal" style="border-color:var(--green)">
+      <div class="technique-label" style="color:var(--green)">Técnica 02 · O Fechamento por Resumo</div>
+      <div class="technique-title">Resuma o valor, então peça.</div>
+      <div class="technique-text">Antes de pedir a decisão, resuma tudo que foi dito de forma positiva. Isso ativa o viés de consistência — o cliente concorda com o resumo e fica mais propenso a dizer sim.</div>
+      <div class="technique-example">"Então, resumindo: sua empresa se enquadra, o benefício estimado é R$ [X], nossa equipe cuida de tudo, e você não paga nada além de um percentual sobre o que economizar. Faz sentido avançarmos?"</div>
+    </div>
+
+    <div class="technique reveal" style="border-color:var(--gold)">
+      <div class="technique-label" style="color:var(--gold)">Técnica 03 · O Fechamento pela Urgência Real</div>
+      <div class="technique-title">Use a urgência do programa, não a sua.</div>
+      <div class="technique-text">Nunca use urgência artificial ("só tenho essa oferta hoje"). Use a urgência real do PERSE — ela é genuína e o cliente sente a diferença.</div>
+      <div class="technique-example">"O único prazp que me preocupa aqui não é o meu — é o seu. Cada mês que passa sem adesão é um mês de benefício que não volta. Não porque eu quero fechar, mas porque a lei tem vigência."</div>
+    </div>
+
+    <div class="technique reveal" style="border-color:var(--red)">
+      <div class="technique-label" style="color:var(--red)">Técnica 04 · O Fechamento pela Pergunta Direta</div>
+      <div class="technique-title">Às vezes, simples é melhor.</div>
+      <div class="technique-text">Após apresentar a proposta completa, faça a pergunta direta com confiança. Silêncio após a pergunta é seu aliado — não preencha.</div>
+      <div class="technique-example">"Tudo faz sentido para você? Podemos avançar?" [Espere. Não fale antes do cliente.] </div>
+    </div>
+
+    <div class="sep"></div>
+    <div style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:16px" class="reveal">🔍 Sinais de compra — O cliente está pronto quando:</div>
+    <div class="grid3">
+      <div class="concept reveal"><div class="concept-icon">❓</div><div><div class="concept-title">Pergunta sobre processo</div><div class="concept-text">"Como funciona a adesão?" — ele quer avançar, só precisa entender os próximos passos.</div></div></div>
+      <div class="concept reveal"><div class="concept-icon">🧮</div><div><div class="concept-title">Quer confirmar o número</div><div class="concept-text">"Você pode me mandar esse cálculo por e-mail?" — ele está pensando em apresentar para alguém.</div></div></div>
+      <div class="concept reveal"><div class="concept-icon">📅</div><div><div class="concept-title">Fala em prazo</div><div class="concept-text">"Quando isso começa a valer?" — ele já está se imaginando com o benefício.</div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     CAP 6 — PÓS-VENDA
+══════════════════════════════════════════════ -->
+<section class="chapter" id="ch6">
+  <div class="ch-header ch6">
+    <div class="ch-number">06</div>
+    <div class="ch-eyebrow">Capítulo 06 · Fidelização</div>
+    <h2 class="ch-title">Fechar é o começo.<br>Não o fim.</h2>
+    <p class="ch-desc">O cliente que você fecha hoje pode ser sua melhor fonte de indicações amanhã. O pós-venda define a sua reputação e sua próxima venda.</p>
+  </div>
+  <div class="ch-body">
+    <div class="grid2">
+      <div>
+        <div class="concept reveal"><div class="concept-icon">🤝</div><div><div class="concept-title">Handoff para a equipe especializada</div><div class="concept-text">Assim que o contrato é assinado, você passa o cliente para a equipe técnica da a equipe especializada com um briefing claro: nome, CNPJ, CNAE, regime tributário e faturamento estimado.</div></div></div>
+        <div class="concept reveal"><div class="concept-icon">📞</div><div><div class="concept-title">Check-in no 1º mês</div><div class="concept-text">Ligue para o cliente 30 dias após a adesão. Pergunte como está sendo a experiência. Isso gera confiança e abre a conversa para indicações.</div></div></div>
+        <div class="concept reveal"><div class="concept-icon">🌟</div><div><div class="concept-title">Peça indicações</div><div class="concept-text">Um cliente satisfeito conhece pelo menos 3 outros empresários no mesmo setor. "Você conhece alguém que poderia se beneficiar como você?" é uma das perguntas mais poderosas do seu arsenal.</div></div></div>
+      </div>
+      <div class="card-dark reveal" style="height:100%">
+        <div style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:3px;color:var(--gold2);margin-bottom:20px;text-transform:uppercase">Roteiro pós-venda</div>
+        <div style="display:grid;gap:14px">
+          <div style="display:flex;gap:12px;align-items:flex-start"><div style="width:28px;height:28px;border-radius:50%;background:var(--gold2);color:var(--ink);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0">1</div><div><div style="font-size:13px;font-weight:600;color:var(--cream)">Dia 1 — Confirmação</div><div style="font-size:12px;color:rgba(250,247,242,0.5)">Mensagem de boas-vindas com próximos passos claros</div></div></div>
+          <div style="display:flex;gap:12px;align-items:flex-start"><div style="width:28px;height:28px;border-radius:50%;background:var(--gold2);color:var(--ink);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0">7</div><div><div style="font-size:13px;font-weight:600;color:var(--cream)">Dia 7 — Follow-up</div><div style="font-size:12px;color:rgba(250,247,242,0.5)">Confirmar que documentação foi recebida pela a equipe especializada</div></div></div>
+          <div style="display:flex;gap:12px;align-items:flex-start"><div style="width:28px;height:28px;border-radius:50%;background:var(--gold2);color:var(--ink);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0">30</div><div><div class="mindset-title" style="font-size:13px;color:var(--cream)">Dia 30 — Check-in</div><div style="font-size:12px;color:rgba(250,247,242,0.5)">Ligar para verificar satisfação e pedir indicações</div></div></div>
+          <div style="display:flex;gap:12px;align-items:flex-start"><div style="width:28px;height:28px;border-radius:50%;background:rgba(212,160,23,0.3);color:var(--gold3);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0">∞</div><div><div style="font-size:13px;font-weight:600;color:var(--cream)">Trimestral — Relacionamento</div><div style="font-size:12px;color:rgba(250,247,242,0.5)">Manter contato ativo. Cliente satisfeito é a melhor prospecção.</div></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="wa-box reveal">
+      <div class="wa-label">WhatsApp · Mensagem de boas-vindas após fechamento</div>
+      <div class="wa-text">Olá, [Nome]! 🎉 Ótima decisão. A partir de agora, a equipe da a equipe especializada cuidará de todo o processo de adesão ao PERSE para a [Empresa]. Em breve você receberá o contato deles. Qualquer dúvida, pode me chamar aqui. Bem-vindo à família! 🤝</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     BÔNUS — FRASES DE OURO
+══════════════════════════════════════════════ -->
+<section class="chapter" id="bonus">
+  <div class="ch-header ch7">
+    <div class="ch-number">★</div>
+    <div class="ch-eyebrow">Bônus · Arsenal do Consultor</div>
+    <h2 class="ch-title">Frases que abrem portas,<br>derrubam muros e fecham.</h2>
+    <p class="ch-desc">Memorize estas frases. Use-as com naturalidade. Elas foram testadas e validadas nas situações mais desafiadoras.</p>
+  </div>
+  <div class="ch-body">
+    <div class="bonus-grid">
+      <div class="phrase-card reveal"><div class="phrase-cat">Abertura · Telefone</div><div class="phrase-text">"Identifiquei que a [Empresa] pode ter direito a um benefício federal que nenhum contador generalista vai buscar por você."</div></div>
+      <div class="phrase-card reveal"><div class="phrase-cat">Urgência · Real</div><div class="phrase-text">"O prazo não é meu — é da lei. E cada mês que passa sem adesão é dinheiro que pertence a você, mas vai para o governo."</div></div>
+      <div class="phrase-card reveal"><div class="phrase-cat">Credibilidade · Confiança</div><div class="phrase-text">"Não precisa acreditar em mim. Pesquise Lei 14.148/2021 no site da Receita agora mesmo — eu espero."</div></div>
+      <div class="phrase-card reveal"><div class="phrase-cat">Custo da Inação</div><div class="phrase-text">"Não aderir também é uma decisão — e uma cara. Você pagaria por algo que já tem direito de não pagar?"</div></div>
+      <div class="phrase-card reveal"><div class="phrase-cat">Indicação · Pós-Venda</div><div class="phrase-text">"Você conhece algum empresário do setor que merece saber desta oportunidade? Uma indicação sua tem muito peso."</div></div>
+      <div class="phrase-card reveal"><div class="phrase-cat">Fechamento · Direto</div><div class="phrase-text">"Tudo faz sentido? Então podemos avançar. O próximo passo é simples — só precisamos de alguns dados da empresa."</div></div>
+    </div>
+
+    <div class="sep"></div>
+    <div style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:20px" class="reveal">Templates WhatsApp · Copiar e adaptar</div>
+
+    <div class="wa-box reveal">
+      <div class="wa-label">Template 01 · Primeiro contato frio</div>
+      <div class="wa-text">Olá [Nome]! Sou [Seu Nome], especialista em PERSE 🤝<br>Identifiquei que a [Empresa] pode ter direito ao PERSE — um programa federal que zera IRPJ, CSLL, PIS e COFINS.<br>Posso te enviar uma análise gratuita? Leva 2 min pra te apresentar. 📊</div>
+    </div>
+    <div class="wa-box reveal">
+      <div class="wa-label">Template 02 · Follow-up após silêncio (3 dias)</div>
+      <div class="wa-text">Oi [Nome], tudo bem? 👋<br>Te mandei uma mensagem há alguns dias sobre o PERSE para a [Empresa].<br>Entendo que o dia a dia é corrido — mas queria só reforçar: o programa tem prazo, e cada mês importa.<br>Posso te mandar o cálculo estimado agora? É sem compromisso. 🎯</div>
+    </div>
+    <div class="wa-box reveal">
+      <div class="wa-label">Template 03 · Após envio de proposta (48h)</div>
+      <div class="wa-text">Bom dia [Nome]! 🌅<br>Você teve a chance de ver a análise que te enviei sobre o PERSE?<br>Fico à disposição para esclarecer qualquer dúvida — pode ser aqui mesmo ou em uma call rápida de 10 min.<br>O que acha? 😊</div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL -->
+<section class="final" id="final">
+  <div class="final-inner">
+    <div style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:5px;color:var(--gold2);text-transform:uppercase;margin-bottom:28px;opacity:.7">O Juramento do Consultor Elite</div>
+    <div class="final-oath">
+      "Eu não vendo um produto.<br>Eu entrego uma <em>oportunidade</em>.<br>Eu não persigo clientes.<br>Eu os <em>protejo</em> do custo de não saber.<br>Cada ligação que faço é uma chance<br>de devolver dinheiro a quem tem direito."
+    </div>
+    <div style="width:60px;height:2px;background:var(--gold2);margin:36px auto"></div>
+    <div class="final-sig">
+      <div class="final-av">🦅</div>
+      <div>
+        <div class="final-name">Consultor Elite</div>
+        <div class="final-role" style="font-size:11px;color:var(--gold2);letter-spacing:2px">Especialista PERSE</div>
+      </div>
+      <div style="width:1px;height:40px;background:rgba(255,255,255,0.1);margin:0 8px"></div>
+      <div class="final-companies">JP BALABAN<br>VOCARE TAX</div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<script>
+// Sidebar active
+function setActive(el){
+  document.querySelectorAll('.sb-link').forEach(l=>l.classList.remove('active'));
+  el.classList.add('active');
+}
+
+// Objection toggles
+function toggleObj(card){
+  card.classList.toggle('open');
+}
+
+// Scroll progress
+window.addEventListener('scroll',()=>{
+  const el=document.documentElement;
+  const pct=Math.round(el.scrollTop/(el.scrollHeight-el.clientHeight)*100);
+  document.getElementById('readProgress').style.width=pct+'%';
+  document.getElementById('readPct').textContent=pct+'%';
+  // Active sidebar link from scroll
+  const sections=['cover','ch1','ch2','ch3','ch4','ch5','ch6','bonus','final'];
+  let active='cover';
+  sections.forEach(id=>{
+    const el=document.getElementById(id);
+    if(el&&el.getBoundingClientRect().top<=120)active=id;
+  });
+  document.querySelectorAll('.sb-link').forEach(l=>{
+    const href=l.getAttribute('href');
+    l.classList.toggle('active',href==='#'+active);
+  });
+});
+
+// Reveal on scroll
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in')});
+},{threshold:.1});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+</script>
+
+    </div>
+    <div class="app-frame" id="frame-pdca">
+      
+<div class="app">
+<aside class="sidebar">
+  <div class="sb-top">
+    <div class="sb-logo">PDCA · PERSE</div>
+    <div class="sb-tagline">Sistema de Gestão Comercial</div>
+  </div>
+  <nav class="sb-nav">
+    <div class="nav-gl">Principal</div>
+    <div class="nav-item active" onclick="go('dashboard',this)"><span class="nav-icon">📊</span>Dashboard</div>
+    <div class="nav-item" onclick="go('list',this)"><span class="nav-icon">📋</span>Todos os PDCAs</div>
+    <div class="nav-item" onclick="go('new',this)"><span class="nav-icon">➕</span>Novo Ciclo</div>
+    <div class="nav-gl">Visões</div>
+    <div class="nav-item" onclick="go('pipeline',this)"><span class="nav-icon">🔄</span>Pipeline Visual</div>
+    <div class="nav-item" onclick="go('reports',this)"><span class="nav-icon">📈</span>Relatório</div>
+  </nav>
+  <div class="sb-stats" id="sbS"></div>
+</aside>
+<div class="main">
+  <div class="topbar">
+    <div><div class="pt" id="pgT">Dashboard</div><div class="ps" id="pgS">Visão geral da campanha PERSE</div></div>
+    <div style="display:flex;gap:9px;align-items:center">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--stone)" id="dt"></div>
+      <button class="btn btn-gold" onclick="go('new',null)">+ Novo PDCA</button>
+    </div>
+  </div>
+  <div class="view active" id="v-dashboard"><div class="kpi-grid" id="kpiG"></div><div class="sec-t">Pipeline</div><div class="pipeline" id="miniP"></div><div class="sec-t">Atividade Recente</div><div id="recA"></div></div>
+  <div class="view" id="v-list"><div class="filters"><input class="srch" id="srch" placeholder="🔍  Buscar empresa, setor, decisor..." oninput="renderList()"><div class="fchip on" onclick="setF('all',this)">Todos</div><div class="fchip" onclick="setF('plan',this)">🎯 Plano</div><div class="fchip" onclick="setF('do',this)">⚡ Execução</div><div class="fchip" onclick="setF('check',this)">🔎 Check</div><div class="fchip" onclick="setF('win',this)">✅ Fechado</div><div class="fchip" onclick="setF('lost',this)">❌ Perdido</div></div><div id="pList"></div></div>
+  <div class="view" id="v-pipeline"><div class="pipeline" id="fullP" style="grid-template-columns:repeat(5,1fr);min-height:380px"></div></div>
+  <div class="view" id="v-new"><div class="wizard"><div class="wsteps" id="wSt"></div><div id="wC" class="ani"></div><div style="display:flex;justify-content:space-between;margin-top:18px"><button class="btn btn-out" id="bBack" onclick="prev()">← Voltar</button><div style="display:flex;gap:9px"><button class="btn btn-out" onclick="saveDraft()">💾 Rascunho</button><button class="btn btn-gold" id="bNext" onclick="nxt()">Próxima →</button></div></div></div></div>
+  <div class="view" id="v-detail"><div id="detC"></div></div>
+  <div class="view" id="v-reports"><div id="repC"></div></div>
+</div>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+const K='pdca_perse_v3';
+let db=JSON.parse(localStorage.getItem(K)||'[]');
+let filt='all',step=0,eid=null,draft={},logs=[],eng=0;
+function save(){localStorage.setItem(K,JSON.stringify(db))}
+document.getElementById('dt').textContent=new Date().toLocaleDateString('pt-BR',{weekday:'short',day:'numeric',month:'short',year:'numeric'}).toUpperCase();
+
+const PM={dashboard:{t:'Dashboard',s:'Visão geral da campanha PERSE'},list:{t:'Todos os PDCAs',s:'Histórico completo de ciclos'},new:{t:'Novo Ciclo PDCA',s:'Registre um cliente ou oportunidade'},pipeline:{t:'Pipeline Visual',s:'Funil de vendas'},reports:{t:'Relatório',s:'Análise de performance'},detail:{t:'Detalhe',s:''}};
+const ST={plan:{l:'Planejamento',i:'🎯',c:'s-plan',col:'#5BA3F5'},do:{l:'Em Execução',i:'⚡',c:'s-do',col:'#F1C40F'},check:{l:'Verificando',i:'🔎',c:'s-check',col:'#E8B840'},win:{l:'Fechado ✅',i:'🏆',c:'s-win',col:'#2ECC71'},lost:{l:'Perdido',i:'❌',c:'s-lost',col:'#E74C3C'}};
+const TRS={'💎 Diamante':'#C0392B','🥇 Ouro':'#D4A017','🥈 Prata':'#95A5A6','⚪ Bronze':'#555'};
+const SECTS=['Transportadora','Indústria','Empresa de Segurança','Empresa Comercial','Distribuidora','Construção Civil','Agronegócio','Outro'];
+const CHANS=['Telefone','WhatsApp','E-mail','Reunião Presencial','Vídeo Chamada','LinkedIn'];
+const TMPS=['Frio','Morno','Quente'];
+const SCRPTS=['Var. A · Empresa em comum','Var. B · Pessoa em comum','Var. C · Oportunidade única','Morno · Após evento','Morno · Cliente antigo','Quente · Indicação direta','Quente · Concorrente','Quente · Mesmo grupo','Outro'];
+const OBJS=['Já tem contador','Manda por e-mail','Sem interesse','Momento difícil','Vou pensar','Bom demais pra ser verdade','Não tenho tempo','Perguntou preço','Já conhece','Outras'];
+
+function go(v,el){
+  document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(x=>x.classList.remove('active'));
+  document.getElementById('v-'+v).classList.add('active');
+  if(el)el.classList.add('active');
+  const m=PM[v]||{};document.getElementById('pgT').textContent=m.t||v;document.getElementById('pgS').textContent=m.s||'';
+  if(v==='dashboard')renderDash();
+  if(v==='list')renderList();
+  if(v==='pipeline')renderPipe();
+  if(v==='new'){eid=null;draft={};logs=[];eng=0;step=0;renderWiz();}
+  if(v==='reports')renderRep();
+  updateSB();
+}
+
+function renderDash(){
+  const c={};Object.keys(ST).forEach(k=>c[k]=0);db.forEach(r=>c[r.status]=(c[r.status]||0)+1);
+  const tot=db.length,contacts=db.reduce((s,r)=>s+(r.logs||[]).length,0),wins=c.win||0;
+  document.getElementById('kpiG').innerHTML=`
+    <div class="kc kc-p ani"><div class="kl kl-p">P</div><div class="kv">${(c.plan||0)+(c.do||0)+(c.check||0)}</div><div class="kla">Ciclos Ativos</div><div class="pbar"><div class="pbar-f" style="width:${tot?Math.round(((c.plan||0)+(c.do||0)+(c.check||0))/tot*100):0}%;background:linear-gradient(90deg,#1B3A8B,#5BA3F5)"></div></div></div>
+    <div class="kc kc-d ani" style="animation-delay:.07s"><div class="kl kl-d">D</div><div class="kv">${contacts}</div><div class="kla">Contatos Feitos</div><div class="pbar"><div class="pbar-f" style="width:${Math.min(contacts*3,100)}%;background:linear-gradient(90deg,#1A6B3A,#2ECC71)"></div></div></div>
+    <div class="kc kc-c ani" style="animation-delay:.14s"><div class="kl kl-c">C</div><div class="kv">${wins}</div><div class="kla">Deals Fechados</div><div class="pbar"><div class="pbar-f" style="width:${tot?Math.round(wins/tot*100):0}%;background:linear-gradient(90deg,#8B6B00,#F1C40F)"></div></div></div>
+    <div class="kc kc-a ani" style="animation-delay:.21s"><div class="kl kl-a">A</div><div class="kv">${tot?Math.round(wins/tot*100):0}%</div><div class="kla">Taxa de Conversão</div><div class="pbar"><div class="pbar-f" style="width:${tot?Math.round(wins/tot*100):0}%;background:linear-gradient(90deg,#8B1A1A,#E74C3C)"></div></div></div>`;
+  document.getElementById('miniP').innerHTML=Object.entries(ST).map(([k,v])=>{
+    const its=db.filter(r=>r.status===k).slice(0,3);
+    return `<div class="pc-col"><div class="pc-h"><span class="pc-label" style="color:${v.col}">${v.i} ${v.l}</span><span class="pc-count" style="color:${v.col}">${db.filter(r=>r.status===k).length}</span></div><div class="pc-body">${its.map(r=>`<div class="pc-card" onclick="openDet('${r.id}')"><div class="pcc-name">${r.company}</div><div class="pcc-meta">${r.dm||'—'}</div><span class="tier-badge" style="color:${TRS[r.tier]||'#888'};background:${TRS[r.tier]||'#888'}18">${r.tier||''}</span></div>`).join('')}${!its.length?'<div style="text-align:center;padding:12px;font-size:10.5px;color:var(--muted)">Vazio</div>':''}</div></div>`;
+  }).join('');
+  const rec=[...db].sort((a,b)=>new Date(b.ua||0)-new Date(a.ua||0)).slice(0,5);
+  document.getElementById('recA').innerHTML=rec.length?rec.map(r=>`<div class="pli ani" onclick="openDet('${r.id}')" style="grid-template-columns:1fr auto auto;gap:12px"><div><div class="pli-co">${r.company}</div><div class="pli-me">${r.sector||'—'} · ${r.dm||'—'}</div></div><span class="sbadge ${ST[r.status]?.c||''}">${ST[r.status]?.i} ${ST[r.status]?.l}</span><div style="font-size:10.5px;color:var(--muted)">${since(r.ua)}</div></div>`).join(''):`<div class="empty"><div class="empty-ic">🎯</div><div class="empty-t">Nenhum ciclo ainda</div><div class="empty-s">Clique em "+ Novo PDCA" para começar</div></div>`;
+}
+
+function setF(f,el){filt=f;document.querySelectorAll('.fchip').forEach(c=>c.classList.remove('on'));el.classList.add('on');renderList();}
+function renderList(){
+  const q=(document.getElementById('srch')?.value||'').toLowerCase();
+  let data=db.filter(r=>{if(filt!=='all'&&r.status!==filt)return false;if(q&&![r.company,r.sector,r.dm,r.notes].join(' ').toLowerCase().includes(q))return false;return true;}).sort((a,b)=>new Date(b.ua||0)-new Date(a.ua||0));
+  const el=document.getElementById('pList');
+  if(!data.length){el.innerHTML=`<div class="empty"><div class="empty-ic">🔍</div><div class="empty-t">Nenhum resultado</div><div class="empty-s">Ajuste os filtros ou a busca</div></div>`;return;}
+  const prog={plan:25,do:50,check:75,win:100,lost:0};
+  el.innerHTML=data.map(r=>`<div class="pli ani" onclick="openDet('${r.id}')"><div><div class="pli-co">${r.company}</div><div class="pli-me">${r.dm||'—'} · ${r.ctype||'—'}</div><div class="pli-se">${r.sector||'—'}</div></div><div><span class="tier-badge" style="color:${TRS[r.tier]||'#888'};background:${TRS[r.tier]||'#888'}18;font-size:10px;padding:2px 7px;border-radius:4px">${r.tier||'—'}</span></div><span class="sbadge ${ST[r.status]?.c||''}">${ST[r.status]?.i} ${ST[r.status]?.l}</span><div><div class="pm"><div class="pm-f" style="width:${prog[r.status]||0}%"></div></div><div style="font-size:10px;color:var(--muted);margin-top:3px">${prog[r.status]||0}% completo</div></div><div style="display:flex;gap:5px" onclick="event.stopPropagation()"><button class="btn btn-sm btn-out" onclick="editP('${r.id}')">✏️</button><button class="btn btn-sm btn-del" onclick="delP('${r.id}')">🗑️</button></div></div>`).join('');
+}
+
+function renderPipe(){
+  document.getElementById('fullP').innerHTML=Object.entries(ST).map(([k,v])=>{
+    const its=db.filter(r=>r.status===k);
+    return `<div class="pc-col"><div class="pc-h" style="background:${v.col}14;border-bottom:2px solid ${v.col}"><span class="pc-label" style="color:${v.col}">${v.i} ${v.l}</span><span class="pc-count" style="color:${v.col}">${its.length}</span></div><div class="pc-body" style="min-height:300px">${its.map(r=>`<div class="pc-card" onclick="openDet('${r.id}')"><div class="pcc-name">${r.company}</div><div class="pcc-meta">${r.sector||'—'}</div><div class="pcc-meta">${r.dm||'—'}</div><span class="tier-badge" style="color:${TRS[r.tier]||'#888'};background:${TRS[r.tier]||'#888'}18">${r.tier||''}</span>${r.rev?`<div style="font-size:9.5px;color:var(--stone);margin-top:2px">R$ ${Number(r.rev).toLocaleString('pt-BR')}</div>`:''}</div>`).join('')}${!its.length?'<div style="text-align:center;padding:16px;font-size:11px;color:var(--muted)">Vazio</div>':''}</div></div>`;
+  }).join('');
+}
+
+// ── WIZARD ───────────────────────────────────────────────────────
+function renderWiz(){
+  const steps=[{ic:'🎯',lb:'Fase 1',nm:'PLAN'},{ic:'⚡',lb:'Fase 2',nm:'DO'},{ic:'🔎',lb:'Fase 3',nm:'CHECK'},{ic:'🔁',lb:'Fase 4',nm:'ACT'}];
+  document.getElementById('wSt').innerHTML=steps.map((s,i)=>`<div class="ws ${i===step?'active':i<step?'done':''}" onclick="goSt(${i})"><div class="ws-ic">${i<step?'✓':s.ic}</div><div class="ws-lb">${s.lb}</div><div class="ws-nm">${s.nm}</div></div>`).join('');
+  document.getElementById('bBack').style.display=step===0?'none':'inline-flex';
+  document.getElementById('bNext').textContent=step===3?'💾 Salvar Ciclo':'Próxima →';
+  const wc=document.getElementById('wC');wc.innerHTML=FORMS[step]();
+  wc.classList.remove('ani');void wc.offsetWidth;wc.classList.add('ani');
+  restoreForm();
+  if(step===1)renderLogs();
+  if(step===2)setStars(draft.eng||0);
+  bindForm();
+}
+function goSt(i){collect();step=i;renderWiz();}
+function nxt(){collect();step<3?(step++,renderWiz()):saveRec();}
+function prev(){collect();step>0&&(step--,renderWiz());}
+function saveDraft(){collect();toast('Rascunho salvo','ok');}
+
+function collect(){
+  document.querySelectorAll('#wC input:not([type=checkbox]):not([type=radio]),#wC select,#wC textarea').forEach(el=>{if(el.id)draft[el.id]=el.value;});
+  document.querySelectorAll('#wC input[type=radio]:checked').forEach(el=>{draft[el.name]=el.value;});
+}
+function restoreForm(){
+  Object.entries(draft).forEach(([k,v])=>{const el=document.getElementById(k);if(el&&el.type!=='checkbox'&&el.type!=='radio')el.value=v;});
+  document.querySelectorAll('#wC input[type=radio]').forEach(el=>{if(draft[el.name]===el.value)el.checked=true;});
+  document.querySelectorAll('#wC input[type=checkbox][data-grp]').forEach(el=>{if((draft[el.dataset.grp]||[]).includes(el.value))el.checked=true;});
+}
+function bindForm(){
+  document.querySelectorAll('#wC input:not([type=checkbox]):not([type=radio]),#wC select,#wC textarea').forEach(el=>el.addEventListener('input',()=>{if(el.id)draft[el.id]=el.value;}));
+  document.querySelectorAll('#wC input[type=radio]').forEach(el=>el.addEventListener('change',()=>{draft[el.name]=el.value;}));
+  document.querySelectorAll('#wC input[type=checkbox][data-grp]').forEach(el=>el.addEventListener('change',()=>{const g=el.dataset.grp;if(!draft[g])draft[g]=[];el.checked?(!draft[g].includes(el.value)&&draft[g].push(el.value)):(draft[g]=draft[g].filter(v=>v!==el.value));}));
+  if(step===2)document.querySelectorAll('.star').forEach((s,i)=>s.addEventListener('click',()=>{eng=i+1;draft.eng=i+1;setStars(i+1);}));
+}
+function setStars(n){document.querySelectorAll('.star').forEach((s,i)=>s.classList.toggle('on',i<n));}
+
+// LOGS
+function renderLogs(){
+  const el=document.getElementById('logC');if(!el)return;
+  el.innerHTML=logs.map((l,i)=>`<div class="log-item ani"><div class="log-row"><div class="fgrp"><label>Data</label><input type="date" value="${l.date||''}" onchange="logs[${i}].date=this.value" style="padding:6px 10px;font-size:12.5px"></div><div class="fgrp"><label>Canal</label><select onchange="logs[${i}].channel=this.value" style="padding:6px 10px;font-size:12.5px">${CHANS.map(c=>`<option ${l.channel===c?'selected':''}>${c}</option>`).join('')}</select></div><div class="fgrp"><label>Temperatura</label><select onchange="logs[${i}].temp=this.value" style="padding:6px 10px;font-size:12.5px">${TMPS.map(t=>`<option ${l.temp===t?'selected':''}>${t}</option>`).join('')}</select></div><button class="del-btn" onclick="rmLog(${i})">✕</button></div><textarea placeholder="Resultado — o que foi dito, reação do cliente, próximo passo..." rows="2" onchange="logs[${i}].result=this.value" style="font-size:13px;margin-top:4px">${l.result||''}</textarea></div>`).join('');
+}
+function addLog(){logs.push({date:new Date().toISOString().slice(0,10),channel:'Telefone',temp:'Frio',result:''});renderLogs();}
+function rmLog(i){logs.splice(i,1);renderLogs();}
+
+// SAVE
+function saveRec(){
+  collect();
+  if(!draft.company?.trim()){toast('Informe o nome da empresa','err');step=0;renderWiz();return;}
+  const id=eid||'p'+Date.now();
+  const ex=db.find(r=>r.id===id);
+  const rec={...(ex||{}),...draft,id,logs,status:draft.finalStatus||(ex?.status||'plan'),ua:new Date().toISOString(),ca:ex?.ca||new Date().toISOString()};
+  if(ex)db=db.map(r=>r.id===id?rec:r);else db.push(rec);
+  save();eid=null;draft={};logs=[];step=0;
+  toast('✅ Ciclo PDCA salvo!','ok');
+  setTimeout(()=>go('list',document.querySelectorAll('.nav-item')[1]),380);
+}
+function editP(id){const r=db.find(x=>x.id===id);if(!r)return;eid=id;draft={...r};logs=[...(r.logs||[])];eng=r.eng||0;step=0;go('new',null);document.getElementById('pgT').textContent='Editar Ciclo';}
+function delP(id){if(!confirm('Excluir este ciclo? Não pode ser desfeito.'))return;db=db.filter(r=>r.id!==id);save();renderList();updateSB();toast('Excluído','err');}
+
+// FORMS
+const FORMS=[
+()=>`<div class="fsec"><div class="fsh">🎯 PLAN · Identificação do Cliente</div>
+<div class="fg">
+<div class="fgrp ff"><label>Nome da Empresa *</label><input id="company" placeholder="Ex: Transportadora Central Ltda"></div>
+<div class="fgrp"><label>Setor</label><select id="sector">${SECTS.map(s=>`<option>${s}</option>`).join('')}</select></div>
+<div class="fgrp"><label>Tier de Prioridade</label><select id="tier"><option>💎 Diamante</option><option>🥇 Ouro</option><option>🥈 Prata</option><option>⚪ Bronze</option></select></div>
+<div class="fgrp"><label>Nome do Decisor</label><input id="dm" placeholder="Nome do sócio, CEO ou CFO"></div>
+<div class="fgrp"><label>Cargo</label><input id="drole" placeholder="Ex: Diretor Financeiro"></div>
+<div class="fgrp"><label>Faturamento Estimado R$</label><input id="rev" type="number" placeholder="Ex: 15000000"></div>
+<div class="fgrp"><label>Tipo de Contato</label><select id="ctype">${TMPS.map(t=>`<option>${t}</option>`).join('')}</select></div>
+<div class="fgrp"><label>Elo / Pessoa ou Empresa em Comum</label><input id="conn" placeholder="Nome que conecta você ao cliente"></div>
+<div class="fgrp"><label>Data do 1º Contato</label><input id="pdate" type="date"></div>
+<div class="fgrp ff"><label>Meta deste Ciclo</label><textarea id="goal" placeholder="O que você quer conquistar neste ciclo? Seja específico."></textarea></div>
+<div class="fgrp ff"><label>Contexto do Cliente</label><textarea id="ctx" placeholder="O que você sabe sobre a empresa? Dores, situação de mercado, oportunidades identificadas..."></textarea></div>
+</div></div>
+<div class="fsec"><div class="fsh">📌 Status Atual do Ciclo</div>
+<div style="display:flex;gap:8px;flex-wrap:wrap">${Object.entries(ST).map(([k,v])=>`<label style="display:flex;align-items:center;gap:7px;padding:8px 13px;background:var(--bg4);border:1px solid var(--border2);border-radius:8px;cursor:pointer;font-size:13px;text-transform:none;letter-spacing:0;font-weight:500;color:var(--stone)"><input type="radio" name="finalStatus" value="${k}" style="width:13px;height:13px;accent-color:var(--gold);cursor:pointer"> ${v.i} ${v.l}</label>`).join('')}</div></div>`,
+
+()=>`<div class="fsec"><div class="fsh">⚡ DO · Registro de Contatos</div>
+<div id="logC"></div>
+<button class="btn btn-out" style="width:100%;justify-content:center;margin-top:6px" onclick="addLog()">+ Adicionar Contato</button></div>
+<div class="fsec"><div class="fsh">📎 Execução Geral</div>
+<div class="fg">
+<div class="fgrp"><label>Reunião Agendada?</label><select id="mtgSched"><option value="">—</option><option value="sim">✅ Sim</option><option value="nao">❌ Não</option><option value="tentativa">🔄 Em andamento</option></select></div>
+<div class="fgrp"><label>Data da Reunião</label><input id="mtgDate" type="date"></div>
+<div class="fgrp"><label>Proposta Enviada?</label><select id="propSent"><option value="">—</option><option value="sim">✅ Sim</option><option value="nao">❌ Não</option><option value="rascunho">📝 Rascunho</option></select></div>
+<div class="fgrp"><label>Script Utilizado</label><select id="script"><option value="">—</option>${SCRPTS.map(s=>`<option>${s}</option>`).join('')}</select></div>
+<div class="fgrp ff"><label>Notas da Execução</label><textarea id="doN" placeholder="Como foi o contato? O que funcionou? O que o cliente disse? Próximos passos combinados..."></textarea></div>
+</div></div>`,
+
+()=>`<div class="fsec"><div class="fsh">🔎 CHECK · Verificação de Resultados</div>
+<div class="fg">
+<div class="fgrp"><label>Reunião Aconteceu?</label><select id="mtgH"><option value="">—</option><option value="sim">✅ Sim</option><option value="nao">❌ Não</option><option value="remarcada">🔄 Remarcada</option></select></div>
+<div class="fgrp"><label>Proposta Apresentada?</label><select id="propPres"><option value="">—</option><option value="sim">✅ Sim</option><option value="nao">❌ Não</option><option value="parcial">🔄 Parcialmente</option></select></div>
+<div class="fgrp ff"><label>Engajamento do Cliente (1–5)</label><div class="stars">${[1,2,3,4,5].map(i=>`<span class="star" data-v="${i}">★</span>`).join('')}</div></div>
+<div class="fgrp"><label>Resp. às Objeções</label><select id="objH"><option value="">—</option><option value="ex">🟢 Excelente</option><option value="bom">🟡 Bom</option><option value="reg">🟠 Regular</option><option value="fail">🔴 Falhou</option></select></div>
+<div class="fgrp"><label>KPI vs Planejado</label><select id="kpi"><option value="">—</option><option value="acima">🟢 Acima</option><option value="ok">🟡 Dentro</option><option value="baixo">🔴 Abaixo</option></select></div>
+</div></div>
+<div class="fsec"><div class="fsh">🚧 Objeções Levantadas</div>
+<div class="chkgp">${OBJS.map(o=>`<label class="chkopt"><input type="checkbox" data-grp="objs" value="${o}"> ${o}</label>`).join('')}</div>
+<div class="fgrp" style="margin-top:12px"><label>Observações do Check</label><textarea id="chkN" placeholder="O que os números e reações do cliente revelam? Gap entre planejado e executado?"></textarea></div></div>`,
+
+()=>`<div class="fsec"><div class="fsh">🔁 ACT · Ação Corretiva e Aprendizado</div>
+<div class="fg">
+<div class="fgrp ff"><label>O que funcionou bem?</label><textarea id="worked" placeholder="Abordagem, script, canal, timing — o que gerou resultado positivo?"></textarea></div>
+<div class="fgrp ff"><label>O que precisa melhorar?</label><textarea id="improve" placeholder="Onde houve perda? O que você faria diferente?"></textarea></div>
+<div class="fgrp ff"><label>Lição Principal do Ciclo</label><textarea id="lesson" placeholder="A grande aprendizagem — algo que muda a forma de agir nos próximos ciclos."></textarea></div>
+</div></div>
+<div class="fsec"><div class="fsh">📅 Próximas Ações</div>
+<div class="fg">
+<div class="fgrp ff"><label>Próxima Ação Imediata</label><input id="nxtAct" placeholder="Ex: Ligar quinta às 10h usando Var. B com elo da Transportadora X"></div>
+<div class="fgrp"><label>Data da Próxima Ação</label><input id="nxtDate" type="date"></div>
+<div class="fgrp"><label>Status Final *</label><select id="finalStatus">${Object.entries(ST).map(([k,v])=>`<option value="${k}">${v.i} ${v.l}</option>`).join('')}</select></div>
+<div class="fgrp ff"><label>Como replicar este aprendizado?</label><textarea id="repl" placeholder="Como aplicar esta lição a outros PDCAs ou consultores da equipe?"></textarea></div>
+</div></div>`,
+];
+
+// DETAIL
+function openDet(id){
+  const r=db.find(x=>x.id===id);if(!r)return;
+  const ph=[
+    {k:'P',t:'PLAN',s:'Planejamento',c:'var(--p)',f:[['Empresa',r.company],['Setor',r.sector],['Tier',r.tier],['Decisor',`${r.dm||'—'}${r.drole?' · '+r.drole:''}`],['Faturamento Est.',r.rev?'R$ '+Number(r.rev).toLocaleString('pt-BR'):'—'],['Tipo Contato',r.ctype],['Elo / Conexão',r.conn],['Data Planejada',r.pdate],['Meta',r.goal],['Contexto',r.ctx]]},
+    {k:'D',t:'DO',s:'Execução',c:'var(--d)',f:[['Reunião Agendada',r.mtgSched],['Data Reunião',r.mtgDate],['Proposta Enviada',r.propSent],['Script',r.script],['Notas',r.doN]]},
+    {k:'C',t:'CHECK',s:'Verificação',c:'var(--c)',f:[['Reunião Aconteceu',r.mtgH],['Proposta Apresentada',r.propPres],['Engajamento','★'.repeat(r.eng||0)+'☆'.repeat(5-(r.eng||0))],['Objeções',(r.objs||[]).join(', ')||'—'],['Resp. Objeções',r.objH],['KPI vs Plano',r.kpi],['Notas',r.chkN]]},
+    {k:'A',t:'ACT',s:'Ação Corretiva',c:'var(--a)',f:[['O que funcionou',r.worked],['O que melhorar',r.improve],['Lição',r.lesson],['Próxima Ação',r.nxtAct],['Data Próx. Ação',r.nxtDate],['Replicação',r.repl]]},
+  ];
+  const phH=ph.map(p=>`<div class="ph-card"><div class="ph-head" style="background:${p.c}14;border-bottom:2px solid ${p.c}"><div class="ph-lt" style="background:${p.c}">${p.k}</div><div><div class="ph-tt">${p.t}</div><div class="ph-st">${p.s}</div></div></div><div class="ph-body">${p.f.filter(([,v])=>v).map(([l,v])=>`<strong>${l}</strong>${String(v)}`).join('')}</div></div>`).join('');
+  const logH=(r.logs||[]).length?`<div class="fsec" style="background:var(--bg3);border:1px solid var(--border2);border-radius:var(--radius);padding:18px 22px;margin-bottom:18px"><div class="fsh">📞 Log de Contatos (${r.logs.length})</div><table class="ltable"><thead><tr><th>Data</th><th>Canal</th><th>Temperatura</th><th>Resultado</th></tr></thead><tbody>${r.logs.map(l=>`<tr><td>${l.date||'—'}</td><td>${l.channel||'—'}</td><td>${l.temp||'—'}</td><td style="color:var(--stone)">${l.result||'—'}</td></tr>`).join('')}</tbody></table></div>`:'';
+  document.getElementById('detC').innerHTML=`<div class="ani"><div style="display:flex;gap:9px;margin-bottom:18px"><button class="btn btn-out" onclick="go('list',null)">← Voltar</button><button class="btn btn-gold" onclick="editP('${r.id}')">✏️ Editar</button><button class="btn btn-del" onclick="delP('${r.id}')">🗑️</button></div><div class="dh"><div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px"><div><div class="dh-co">${r.company}</div><div class="dh-se">${r.sector||''} · ${r.tier||''}</div></div><span class="sbadge ${ST[r.status]?.c||''}" style="font-size:13px;padding:6px 14px">${ST[r.status]?.i} ${ST[r.status]?.l}</span></div><div class="dh-meta"><div class="dm">Decisor: <strong>${r.dm||'—'}</strong></div><div class="dm">Cargo: <strong>${r.drole||'—'}</strong></div><div class="dm">Contato: <strong>${r.ctype||'—'}</strong></div>${r.nxtDate?`<div class="dm">Próx. ação: <strong style="color:var(--gold2)">${new Date(r.nxtDate+'T12:00').toLocaleDateString('pt-BR')}</strong></div>`:''}<div class="dm">Atualizado: <strong>${since(r.ua)}</strong></div></div></div><div class="ph-grid">${phH}</div>${logH}</div>`;
+  go('detail',null);document.getElementById('pgS').textContent=r.company;
+}
+
+// REPORTS
+function renderRep(){
+  const tot=db.length,wins=db.filter(r=>r.status==='win').length,contacts=db.reduce((s,r)=>s+(r.logs||[]).length,0);
+  const sects={},scrps={},objs2={};
+  db.forEach(r=>{if(r.sector)sects[r.sector]=(sects[r.sector]||0)+1;if(r.script)scrps[r.script]=(scrps[r.script]||0)+1;(r.objs||[]).forEach(o=>objs2[o]=(objs2[o]||0)+1);});
+  document.getElementById('repC').innerHTML=`<div class="ani" style="display:grid;grid-template-columns:1fr 1fr;gap:18px">
+<div class="fsec" style="background:var(--bg3);border:1px solid var(--border2);border-radius:var(--radius);padding:22px"><div class="fsh">📊 Indicadores Gerais</div>${[['Total de Ciclos',tot],['Contatos Feitos',contacts],['Deals Fechados',wins],['Taxa de Conversão',tot?Math.round(wins/tot*100)+'%':'—'],['Em Execução',db.filter(r=>r.status==='do').length],['Em Verificação',db.filter(r=>r.status==='check').length]].map(([l,v])=>`<div style="display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--border2)"><span style="font-size:13.5px;color:var(--stone)">${l}</span><span style="font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:600">${v}</span></div>`).join('')}</div>
+<div class="fsec" style="background:var(--bg3);border:1px solid var(--border2);border-radius:var(--radius);padding:22px"><div class="fsh">🏭 Por Setor</div>${Object.entries(sects).sort((a,b)=>b[1]-a[1]).map(([s,n])=>`<div style="margin-bottom:9px"><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:3px"><span style="color:var(--stone)">${s}</span><span style="font-weight:600">${n}</span></div><div class="pbar"><div class="pbar-f" style="width:${tot?Math.round(n/tot*100):0}%;background:linear-gradient(90deg,var(--gold),var(--gold2))"></div></div></div>`).join('')||'<div style="color:var(--muted);font-size:13px">Sem dados</div>'}</div>
+<div class="fsec" style="background:var(--bg3);border:1px solid var(--border2);border-radius:var(--radius);padding:22px"><div class="fsh">📞 Scripts Mais Usados</div>${Object.entries(scrps).sort((a,b)=>b[1]-a[1]).slice(0,6).map(([s,n])=>`<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border2);font-size:13px"><span style="color:var(--stone)">${s}</span><span style="font-family:'JetBrains Mono',monospace;font-weight:600">${n}x</span></div>`).join('')||'<div style="color:var(--muted);font-size:13px">Sem dados</div>'}</div>
+<div class="fsec" style="background:var(--bg3);border:1px solid var(--border2);border-radius:var(--radius);padding:22px"><div class="fsh">🚧 Objeções Mais Frequentes</div>${Object.entries(objs2).sort((a,b)=>b[1]-a[1]).slice(0,6).map(([o,n])=>`<div style="margin-bottom:9px"><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:3px"><span style="color:var(--stone)">${o}</span><span style="color:var(--a2);font-weight:600">${n}x</span></div><div class="pbar"><div class="pbar-f" style="width:${tot?Math.round(n/tot*100):0}%;background:linear-gradient(90deg,var(--a),var(--a2))"></div></div></div>`).join('')||'<div style="color:var(--muted);font-size:13px">Sem dados</div>'}</div>
+</div>`;
+}
+
+function updateSB(){
+  const act=db.filter(r=>!['win','lost'].includes(r.status)).length,wins=db.filter(r=>r.status==='win').length;
+  const today=db.filter(r=>r.nxtDate===new Date().toISOString().slice(0,10)).length;
+  document.getElementById('sbS').innerHTML=`<div class="ms"><span class="ms-l">Ciclos ativos</span><span class="ms-v">${act}</span></div><div class="ms"><span class="ms-l">Fechamentos</span><span class="ms-v">${wins}</span></div><div class="ms"><span class="ms-l">Ações hoje</span><span class="ms-v" style="${today?'color:var(--a2)':''}">${today}</span></div>`;
+}
+function since(iso){if(!iso)return'—';const s=Math.floor((Date.now()-new Date(iso))/1000);if(s<60)return'agora';if(s<3600)return Math.floor(s/60)+'min';if(s<86400)return Math.floor(s/3600)+'h atrás';return Math.floor(s/86400)+'d atrás';}
+function toast(msg,type='ok'){const t=document.getElementById('toast');t.textContent=msg;t.className=`toast t-${type} show`;setTimeout(()=>t.classList.remove('show'),2800);}
+renderDash();updateSB();
+</script>
+
+    </div>
+  </div>
+</div>
+<script>
+function showApp(id, btn) {
+  document.querySelectorAll('.app-frame').forEach(f => f.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('frame-' + id).classList.add('active');
+  btn.classList.add('active');
+  // Re-trigger any init logic
+  if(id === 'pdca') {
+    try { renderDash(); updateSB(); } catch(e) {}
+  }
+}
+// Bluebook scripts
+
+// Sidebar active
+function setActive(el){
+  document.querySelectorAll('.sb-link').forEach(l=>l.classList.remove('active'));
+  el.classList.add('active');
+}
+
+// Objection toggles
+function toggleObj(card){
+  card.classList.toggle('open');
+}
+
+// Scroll progress
+window.addEventListener('scroll',()=>{
+  const el=document.documentElement;
+  const pct=Math.round(el.scrollTop/(el.scrollHeight-el.clientHeight)*100);
+  document.getElementById('readProgress').style.width=pct+'%';
+  document.getElementById('readPct').textContent=pct+'%';
+  // Active sidebar link from scroll
+  const sections=['cover','ch1','ch2','ch3','ch4','ch5','ch6','bonus','final'];
+  let active='cover';
+  sections.forEach(id=>{
+    const el=document.getElementById(id);
+    if(el&&el.getBoundingClientRect().top<=120)active=id;
+  });
+  document.querySelectorAll('.sb-link').forEach(l=>{
+    const href=l.getAttribute('href');
+    l.classList.toggle('active',href==='#'+active);
+  });
+});
+
+// Reveal on scroll
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in')});
+},{threshold:.1});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+</script>
+<script>
+// PDCA scripts
+
+const K='pdca_perse_v3';
+let db=JSON.parse(localStorage.getItem(K)||'[]');
+let filt='all',step=0,eid=null,draft={},logs=[],eng=0;
+function save(){localStorage.setItem(K,JSON.stringify(db))}
+document.getElementById('dt').textContent=new Date().toLocaleDateString('pt-BR',{weekday:'short',day:'numeric',month:'short',year:'numeric'}).toUpperCase();
+
+const PM={dashboard:{t:'Dashboard',s:'Visão geral da campanha PERSE'},list:{t:'Todos os PDCAs',s:'Histórico completo de ciclos'},new:{t:'Novo Ciclo PDCA',s:'Registre um cliente ou oportunidade'},pipeline:{t:'Pipeline Visual',s:'Funil de vendas'},reports:{t:'Relatório',s:'Análise de performance'},detail:{t:'Detalhe',s:''}};
+const ST={plan:{l:'Planejamento',i:'🎯',c:'s-plan',col:'#5BA3F5'},do:{l:'Em Execução',i:'⚡',c:'s-do',col:'#F1C40F'},check:{l:'Verificando',i:'🔎',c:'s-check',col:'#E8B840'},win:{l:'Fechado ✅',i:'🏆',c:'s-win',col:'#2ECC71'},lost:{l:'Perdido',i:'❌',c:'s-lost',col:'#E74C3C'}};
+const TRS={'💎 Diamante':'#C0392B','🥇 Ouro':'#D4A017','🥈 Prata':'#95A5A6','⚪ Bronze':'#555'};
+const SECTS=['Transportadora','Indústria','Empresa de Segurança','Empresa Comercial','Distribuidora','Construção Civil','Agronegócio','Outro'];
+const CHANS=['Telefone','WhatsApp','E-mail','Reunião Presencial','Vídeo Chamada','LinkedIn'];
+const TMPS=['Frio','Morno','Quente'];
+const SCRPTS=['Var. A · Empresa em comum','Var. B · Pessoa em comum','Var. C · Oportunidade única','Morno · Após evento','Morno · Cliente antigo','Quente · Indicação direta','Quente · Concorrente','Quente · Mesmo grupo','Outro'];
+const OBJS=['Já tem contador','Manda por e-mail','Sem interesse','Momento difícil','Vou pensar','Bom demais pra ser verdade','Não tenho tempo','Perguntou preço','Já conhece','Outras'];
+
+function go(v,el){
+  document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(x=>x.classList.remove('active'));
+  document.getElementById('v-'+v).classList.add('active');
+  if(el)el.classList.add('active');
+  const m=PM[v]||{};document.getElementById('pgT').textContent=m.t||v;document.getElementById('pgS').textContent=m.s||'';
+  if(v==='dashboard')renderDash();
+  if(v==='list')renderList();
+  if(v==='pipeline')renderPipe();
+  if(v==='new'){eid=null;draft={};logs=[];eng=0;step=0;renderWiz();}
+  if(v==='reports')renderRep();
+  updateSB();
+}
+
+function renderDash(){
+  const c={};Object.keys(ST).forEach(k=>c[k]=0);db.forEach(r=>c[r.status]=(c[r.status]||0)+1);
+  const tot=db.length,contacts=db.reduce((s,r)=>s+(r.logs||[]).length,0),wins=c.win||0;
+  document.getElementById('kpiG').innerHTML=`
+    <div class="kc kc-p ani"><div class="kl kl-p">P</div><div class="kv">${(c.plan||0)+(c.do||0)+(c.check||0)}</div><div class="kla">Ciclos Ativos</div><div class="pbar"><div class="pbar-f" style="width:${tot?Math.round(((c.plan||0)+(c.do||0)+(c.check||0))/tot*100):0}%;background:linear-gradient(90deg,#1B3A8B,#5BA3F5)"></div></div></div>
+    <div class="kc kc-d ani" style="animation-delay:.07s"><div class="kl kl-d">D</div><div class="kv">${contacts}</div><div class="kla">Contatos Feitos</div><div class="pbar"><div class="pbar-f" style="width:${Math.min(contacts*3,100)}%;background:linear-gradient(90deg,#1A6B3A,#2ECC71)"></div></div></div>
+    <div class="kc kc-c ani" style="animation-delay:.14s"><div class="kl kl-c">C</div><div class="kv">${wins}</div><div class="kla">Deals Fechados</div><div class="pbar"><div class="pbar-f" style="width:${tot?Math.round(wins/tot*100):0}%;background:linear-gradient(90deg,#8B6B00,#F1C40F)"></div></div></div>
+    <div class="kc kc-a ani" style="animation-delay:.21s"><div class="kl kl-a">A</div><div class="kv">${tot?Math.round(wins/tot*100):0}%</div><div class="kla">Taxa de Conversão</div><div class="pbar"><div class="pbar-f" style="width:${tot?Math.round(wins/tot*100):0}%;background:linear-gradient(90deg,#8B1A1A,#E74C3C)"></div></div></div>`;
+  document.getElementById('miniP').innerHTML=Object.entries(ST).map(([k,v])=>{
+    const its=db.filter(r=>r.status===k).slice(0,3);
+    return `<div class="pc-col"><div class="pc-h"><span class="pc-label" style="color:${v.col}">${v.i} ${v.l}</span><span class="pc-count" style="color:${v.col}">${db.filter(r=>r.status===k).length}</span></div><div class="pc-body">${its.map(r=>`<div class="pc-card" onclick="openDet('${r.id}')"><div class="pcc-name">${r.company}</div><div class="pcc-meta">${r.dm||'—'}</div><span class="tier-badge" style="color:${TRS[r.tier]||'#888'};background:${TRS[r.tier]||'#888'}18">${r.tier||''}</span></div>`).join('')}${!its.length?'<div style="text-align:center;padding:12px;font-size:10.5px;color:var(--muted)">Vazio</div>':''}</div></div>`;
+  }).join('');
+  const rec=[...db].sort((a,b)=>new Date(b.ua||0)-new Date(a.ua||0)).slice(0,5);
+  document.getElementById('recA').innerHTML=rec.length?rec.map(r=>`<div class="pli ani" onclick="openDet('${r.id}')" style="grid-template-columns:1fr auto auto;gap:12px"><div><div class="pli-co">${r.company}</div><div class="pli-me">${r.sector||'—'} · ${r.dm||'—'}</div></div><span class="sbadge ${ST[r.status]?.c||''}">${ST[r.status]?.i} ${ST[r.status]?.l}</span><div style="font-size:10.5px;color:var(--muted)">${since(r.ua)}</div></div>`).join(''):`<div class="empty"><div class="empty-ic">🎯</div><div class="empty-t">Nenhum ciclo ainda</div><div class="empty-s">Clique em "+ Novo PDCA" para começar</div></div>`;
+}
+
+function setF(f,el){filt=f;document.querySelectorAll('.fchip').forEach(c=>c.classList.remove('on'));el.classList.add('on');renderList();}
+function renderList(){
+  const q=(document.getElementById('srch')?.value||'').toLowerCase();
+  let data=db.filter(r=>{if(filt!=='all'&&r.status!==filt)return false;if(q&&![r.company,r.sector,r.dm,r.notes].join(' ').toLowerCase().includes(q))return false;return true;}).sort((a,b)=>new Date(b.ua||0)-new Date(a.ua||0));
+  const el=document.getElementById('pList');
+  if(!data.length){el.innerHTML=`<div class="empty"><div class="empty-ic">🔍</div><div class="empty-t">Nenhum resultado</div><div class="empty-s">Ajuste os filtros ou a busca</div></div>`;return;}
+  const prog={plan:25,do:50,check:75,win:100,lost:0};
+  el.innerHTML=data.map(r=>`<div class="pli ani" onclick="openDet('${r.id}')"><div><div class="pli-co">${r.company}</div><div class="pli-me">${r.dm||'—'} · ${r.ctype||'—'}</div><div class="pli-se">${r.sector||'—'}</div></div><div><span class="tier-badge" style="color:${TRS[r.tier]||'#888'};background:${TRS[r.tier]||'#888'}18;font-size:10px;padding:2px 7px;border-radius:4px">${r.tier||'—'}</span></div><span class="sbadge ${ST[r.status]?.c||''}">${ST[r.status]?.i} ${ST[r.status]?.l}</span><div><div class="pm"><div class="pm-f" style="width:${prog[r.status]||0}%"></div></div><div style="font-size:10px;color:var(--muted);margin-top:3px">${prog[r.status]||0}% completo</div></div><div style="display:flex;gap:5px" onclick="event.stopPropagation()"><button class="btn btn-sm btn-out" onclick="editP('${r.id}')">✏️</button><button class="btn btn-sm btn-del" onclick="delP('${r.id}')">🗑️</button></div></div>`).join('');
+}
+
+function renderPipe(){
+  document.getElementById('fullP').innerHTML=Object.entries(ST).map(([k,v])=>{
+    const its=db.filter(r=>r.status===k);
+    return `<div class="pc-col"><div class="pc-h" style="background:${v.col}14;border-bottom:2px solid ${v.col}"><span class="pc-label" style="color:${v.col}">${v.i} ${v.l}</span><span class="pc-count" style="color:${v.col}">${its.length}</span></div><div class="pc-body" style="min-height:300px">${its.map(r=>`<div class="pc-card" onclick="openDet('${r.id}')"><div class="pcc-name">${r.company}</div><div class="pcc-meta">${r.sector||'—'}</div><div class="pcc-meta">${r.dm||'—'}</div><span class="tier-badge" style="color:${TRS[r.tier]||'#888'};background:${TRS[r.tier]||'#888'}18">${r.tier||''}</span>${r.rev?`<div style="font-size:9.5px;color:var(--stone);margin-top:2px">R$ ${Number(r.rev).toLocaleString('pt-BR')}</div>`:''}</div>`).join('')}${!its.length?'<div style="text-align:center;padding:16px;font-size:11px;color:var(--muted)">Vazio</div>':''}</div></div>`;
+  }).join('');
+}
+
+// ── WIZARD ───────────────────────────────────────────────────────
+function renderWiz(){
+  const steps=[{ic:'🎯',lb:'Fase 1',nm:'PLAN'},{ic:'⚡',lb:'Fase 2',nm:'DO'},{ic:'🔎',lb:'Fase 3',nm:'CHECK'},{ic:'🔁',lb:'Fase 4',nm:'ACT'}];
+  document.getElementById('wSt').innerHTML=steps.map((s,i)=>`<div class="ws ${i===step?'active':i<step?'done':''}" onclick="goSt(${i})"><div class="ws-ic">${i<step?'✓':s.ic}</div><div class="ws-lb">${s.lb}</div><div class="ws-nm">${s.nm}</div></div>`).join('');
+  document.getElementById('bBack').style.display=step===0?'none':'inline-flex';
+  document.getElementById('bNext').textContent=step===3?'💾 Salvar Ciclo':'Próxima →';
+  const wc=document.getElementById('wC');wc.innerHTML=FORMS[step]();
+  wc.classList.remove('ani');void wc.offsetWidth;wc.classList.add('ani');
+  restoreForm();
+  if(step===1)renderLogs();
+  if(step===2)setStars(draft.eng||0);
+  bindForm();
+}
+function goSt(i){collect();step=i;renderWiz();}
+function nxt(){collect();step<3?(step++,renderWiz()):saveRec();}
+function prev(){collect();step>0&&(step--,renderWiz());}
+function saveDraft(){collect();toast('Rascunho salvo','ok');}
+
+function collect(){
+  document.querySelectorAll('#wC input:not([type=checkbox]):not([type=radio]),#wC select,#wC textarea').forEach(el=>{if(el.id)draft[el.id]=el.value;});
+  document.querySelectorAll('#wC input[type=radio]:checked').forEach(el=>{draft[el.name]=el.value;});
+}
+function restoreForm(){
+  Object.entries(draft).forEach(([k,v])=>{const el=document.getElementById(k);if(el&&el.type!=='checkbox'&&el.type!=='radio')el.value=v;});
+  document.querySelectorAll('#wC input[type=radio]').forEach(el=>{if(draft[el.name]===el.value)el.checked=true;});
+  document.querySelectorAll('#wC input[type=checkbox][data-grp]').forEach(el=>{if((draft[el.dataset.grp]||[]).includes(el.value))el.checked=true;});
+}
+function bindForm(){
+  document.querySelectorAll('#wC input:not([type=checkbox]):not([type=radio]),#wC select,#wC textarea').forEach(el=>el.addEventListener('input',()=>{if(el.id)draft[el.id]=el.value;}));
+  document.querySelectorAll('#wC input[type=radio]').forEach(el=>el.addEventListener('change',()=>{draft[el.name]=el.value;}));
+  document.querySelectorAll('#wC input[type=checkbox][data-grp]').forEach(el=>el.addEventListener('change',()=>{const g=el.dataset.grp;if(!draft[g])draft[g]=[];el.checked?(!draft[g].includes(el.value)&&draft[g].push(el.value)):(draft[g]=draft[g].filter(v=>v!==el.value));}));
+  if(step===2)document.querySelectorAll('.star').forEach((s,i)=>s.addEventListener('click',()=>{eng=i+1;draft.eng=i+1;setStars(i+1);}));
+}
+function setStars(n){document.querySelectorAll('.star').forEach((s,i)=>s.classList.toggle('on',i<n));}
+
+// LOGS
+function renderLogs(){
+  const el=document.getElementById('logC');if(!el)return;
+  el.innerHTML=logs.map((l,i)=>`<div class="log-item ani"><div class="log-row"><div class="fgrp"><label>Data</label><input type="date" value="${l.date||''}" onchange="logs[${i}].date=this.value" style="padding:6px 10px;font-size:12.5px"></div><div class="fgrp"><label>Canal</label><select onchange="logs[${i}].channel=this.value" style="padding:6px 10px;font-size:12.5px">${CHANS.map(c=>`<option ${l.channel===c?'selected':''}>${c}</option>`).join('')}</select></div><div class="fgrp"><label>Temperatura</label><select onchange="logs[${i}].temp=this.value" style="padding:6px 10px;font-size:12.5px">${TMPS.map(t=>`<option ${l.temp===t?'selected':''}>${t}</option>`).join('')}</select></div><button class="del-btn" onclick="rmLog(${i})">✕</button></div><textarea placeholder="Resultado — o que foi dito, reação do cliente, próximo passo..." rows="2" onchange="logs[${i}].result=this.value" style="font-size:13px;margin-top:4px">${l.result||''}</textarea></div>`).join('');
+}
+function addLog(){logs.push({date:new Date().toISOString().slice(0,10),channel:'Telefone',temp:'Frio',result:''});renderLogs();}
+function rmLog(i){logs.splice(i,1);renderLogs();}
+
+// SAVE
+function saveRec(){
+  collect();
+  if(!draft.company?.trim()){toast('Informe o nome da empresa','err');step=0;renderWiz();return;}
+  const id=eid||'p'+Date.now();
+  const ex=db.find(r=>r.id===id);
+  const rec={...(ex||{}),...draft,id,logs,status:draft.finalStatus||(ex?.status||'plan'),ua:new Date().toISOString(),ca:ex?.ca||new Date().toISOString()};
+  if(ex)db=db.map(r=>r.id===id?rec:r);else db.push(rec);
+  save();eid=null;draft={};logs=[];step=0;
+  toast('✅ Ciclo PDCA salvo!','ok');
+  setTimeout(()=>go('list',document.querySelectorAll('.nav-item')[1]),380);
+}
+function editP(id){const r=db.find(x=>x.id===id);if(!r)return;eid=id;draft={...r};logs=[...(r.logs||[])];eng=r.eng||0;step=0;go('new',null);document.getElementById('pgT').textContent='Editar Ciclo';}
+function delP(id){if(!confirm('Excluir este ciclo? Não pode ser desfeito.'))return;db=db.filter(r=>r.id!==id);save();renderList();updateSB();toast('Excluído','err');}
+
+// FORMS
+const FORMS=[
+()=>`<div class="fsec"><div class="fsh">🎯 PLAN · Identificação do Cliente</div>
+<div class="fg">
+<div class="fgrp ff"><label>Nome da Empresa *</label><input id="company" placeholder="Ex: Transportadora Central Ltda"></div>
+<div class="fgrp"><label>Setor</label><select id="sector">${SECTS.map(s=>`<option>${s}</option>`).join('')}</select></div>
+<div class="fgrp"><label>Tier de Prioridade</label><select id="tier"><option>💎 Diamante</option><option>🥇 Ouro</option><option>🥈 Prata</option><option>⚪ Bronze</option></select></div>
+<div class="fgrp"><label>Nome do Decisor</label><input id="dm" placeholder="Nome do sócio, CEO ou CFO"></div>
+<div class="fgrp"><label>Cargo</label><input id="drole" placeholder="Ex: Diretor Financeiro"></div>
+<div class="fgrp"><label>Faturamento Estimado R$</label><input id="rev" type="number" placeholder="Ex: 15000000"></div>
+<div class="fgrp"><label>Tipo de Contato</label><select id="ctype">${TMPS.map(t=>`<option>${t}</option>`).join('')}</select></div>
+<div class="fgrp"><label>Elo / Pessoa ou Empresa em Comum</label><input id="conn" placeholder="Nome que conecta você ao cliente"></div>
+<div class="fgrp"><label>Data do 1º Contato</label><input id="pdate" type="date"></div>
+<div class="fgrp ff"><label>Meta deste Ciclo</label><textarea id="goal" placeholder="O que você quer conquistar neste ciclo? Seja específico."></textarea></div>
+<div class="fgrp ff"><label>Contexto do Cliente</label><textarea id="ctx" placeholder="O que você sabe sobre a empresa? Dores, situação de mercado, oportunidades identificadas..."></textarea></div>
+</div></div>
+<div class="fsec"><div class="fsh">📌 Status Atual do Ciclo</div>
+<div style="display:flex;gap:8px;flex-wrap:wrap">${Object.entries(ST).map(([k,v])=>`<label style="display:flex;align-items:center;gap:7px;padding:8px 13px;background:var(--bg4);border:1px solid var(--border2);border-radius:8px;cursor:pointer;font-size:13px;text-transform:none;letter-spacing:0;font-weight:500;color:var(--stone)"><input type="radio" name="finalStatus" value="${k}" style="width:13px;height:13px;accent-color:var(--gold);cursor:pointer"> ${v.i} ${v.l}</label>`).join('')}</div></div>`,
+
+()=>`<div class="fsec"><div class="fsh">⚡ DO · Registro de Contatos</div>
+<div id="logC"></div>
+<button class="btn btn-out" style="width:100%;justify-content:center;margin-top:6px" onclick="addLog()">+ Adicionar Contato</button></div>
+<div class="fsec"><div class="fsh">📎 Execução Geral</div>
+<div class="fg">
+<div class="fgrp"><label>Reunião Agendada?</label><select id="mtgSched"><option value="">—</option><option value="sim">✅ Sim</option><option value="nao">❌ Não</option><option value="tentativa">🔄 Em andamento</option></select></div>
+<div class="fgrp"><label>Data da Reunião</label><input id="mtgDate" type="date"></div>
+<div class="fgrp"><label>Proposta Enviada?</label><select id="propSent"><option value="">—</option><option value="sim">✅ Sim</option><option value="nao">❌ Não</option><option value="rascunho">📝 Rascunho</option></select></div>
+<div class="fgrp"><label>Script Utilizado</label><select id="script"><option value="">—</option>${SCRPTS.map(s=>`<option>${s}</option>`).join('')}</select></div>
+<div class="fgrp ff"><label>Notas da Execução</label><textarea id="doN" placeholder="Como foi o contato? O que funcionou? O que o cliente disse? Próximos passos combinados..."></textarea></div>
+</div></div>`,
+
+()=>`<div class="fsec"><div class="fsh">🔎 CHECK · Verificação de Resultados</div>
+<div class="fg">
+<div class="fgrp"><label>Reunião Aconteceu?</label><select id="mtgH"><option value="">—</option><option value="sim">✅ Sim</option><option value="nao">❌ Não</option><option value="remarcada">🔄 Remarcada</option></select></div>
+<div class="fgrp"><label>Proposta Apresentada?</label><select id="propPres"><option value="">—</option><option value="sim">✅ Sim</option><option value="nao">❌ Não</option><option value="parcial">🔄 Parcialmente</option></select></div>
+<div class="fgrp ff"><label>Engajamento do Cliente (1–5)</label><div class="stars">${[1,2,3,4,5].map(i=>`<span class="star" data-v="${i}">★</span>`).join('')}</div></div>
+<div class="fgrp"><label>Resp. às Objeções</label><select id="objH"><option value="">—</option><option value="ex">🟢 Excelente</option><option value="bom">🟡 Bom</option><option value="reg">🟠 Regular</option><option value="fail">🔴 Falhou</option></select></div>
+<div class="fgrp"><label>KPI vs Planejado</label><select id="kpi"><option value="">—</option><option value="acima">🟢 Acima</option><option value="ok">🟡 Dentro</option><option value="baixo">🔴 Abaixo</option></select></div>
+</div></div>
+<div class="fsec"><div class="fsh">🚧 Objeções Levantadas</div>
+<div class="chkgp">${OBJS.map(o=>`<label class="chkopt"><input type="checkbox" data-grp="objs" value="${o}"> ${o}</label>`).join('')}</div>
+<div class="fgrp" style="margin-top:12px"><label>Observações do Check</label><textarea id="chkN" placeholder="O que os números e reações do cliente revelam? Gap entre planejado e executado?"></textarea></div></div>`,
+
+()=>`<div class="fsec"><div class="fsh">🔁 ACT · Ação Corretiva e Aprendizado</div>
+<div class="fg">
+<div class="fgrp ff"><label>O que funcionou bem?</label><textarea id="worked" placeholder="Abordagem, script, canal, timing — o que gerou resultado positivo?"></textarea></div>
+<div class="fgrp ff"><label>O que precisa melhorar?</label><textarea id="improve" placeholder="Onde houve perda? O que você faria diferente?"></textarea></div>
+<div class="fgrp ff"><label>Lição Principal do Ciclo</label><textarea id="lesson" placeholder="A grande aprendizagem — algo que muda a forma de agir nos próximos ciclos."></textarea></div>
+</div></div>
+<div class="fsec"><div class="fsh">📅 Próximas Ações</div>
+<div class="fg">
+<div class="fgrp ff"><label>Próxima Ação Imediata</label><input id="nxtAct" placeholder="Ex: Ligar quinta às 10h usando Var. B com elo da Transportadora X"></div>
+<div class="fgrp"><label>Data da Próxima Ação</label><input id="nxtDate" type="date"></div>
+<div class="fgrp"><label>Status Final *</label><select id="finalStatus">${Object.entries(ST).map(([k,v])=>`<option value="${k}">${v.i} ${v.l}</option>`).join('')}</select></div>
+<div class="fgrp ff"><label>Como replicar este aprendizado?</label><textarea id="repl" placeholder="Como aplicar esta lição a outros PDCAs ou consultores da equipe?"></textarea></div>
+</div></div>`,
+];
+
+// DETAIL
+function openDet(id){
+  const r=db.find(x=>x.id===id);if(!r)return;
+  const ph=[
+    {k:'P',t:'PLAN',s:'Planejamento',c:'var(--p)',f:[['Empresa',r.company],['Setor',r.sector],['Tier',r.tier],['Decisor',`${r.dm||'—'}${r.drole?' · '+r.drole:''}`],['Faturamento Est.',r.rev?'R$ '+Number(r.rev).toLocaleString('pt-BR'):'—'],['Tipo Contato',r.ctype],['Elo / Conexão',r.conn],['Data Planejada',r.pdate],['Meta',r.goal],['Contexto',r.ctx]]},
+    {k:'D',t:'DO',s:'Execução',c:'var(--d)',f:[['Reunião Agendada',r.mtgSched],['Data Reunião',r.mtgDate],['Proposta Enviada',r.propSent],['Script',r.script],['Notas',r.doN]]},
+    {k:'C',t:'CHECK',s:'Verificação',c:'var(--c)',f:[['Reunião Aconteceu',r.mtgH],['Proposta Apresentada',r.propPres],['Engajamento','★'.repeat(r.eng||0)+'☆'.repeat(5-(r.eng||0))],['Objeções',(r.objs||[]).join(', ')||'—'],['Resp. Objeções',r.objH],['KPI vs Plano',r.kpi],['Notas',r.chkN]]},
+    {k:'A',t:'ACT',s:'Ação Corretiva',c:'var(--a)',f:[['O que funcionou',r.worked],['O que melhorar',r.improve],['Lição',r.lesson],['Próxima Ação',r.nxtAct],['Data Próx. Ação',r.nxtDate],['Replicação',r.repl]]},
+  ];
+  const phH=ph.map(p=>`<div class="ph-card"><div class="ph-head" style="background:${p.c}14;border-bottom:2px solid ${p.c}"><div class="ph-lt" style="background:${p.c}">${p.k}</div><div><div class="ph-tt">${p.t}</div><div class="ph-st">${p.s}</div></div></div><div class="ph-body">${p.f.filter(([,v])=>v).map(([l,v])=>`<strong>${l}</strong>${String(v)}`).join('')}</div></div>`).join('');
+  const logH=(r.logs||[]).length?`<div class="fsec" style="background:var(--bg3);border:1px solid var(--border2);border-radius:var(--radius);padding:18px 22px;margin-bottom:18px"><div class="fsh">📞 Log de Contatos (${r.logs.length})</div><table class="ltable"><thead><tr><th>Data</th><th>Canal</th><th>Temperatura</th><th>Resultado</th></tr></thead><tbody>${r.logs.map(l=>`<tr><td>${l.date||'—'}</td><td>${l.channel||'—'}</td><td>${l.temp||'—'}</td><td style="color:var(--stone)">${l.result||'—'}</td></tr>`).join('')}</tbody></table></div>`:'';
+  document.getElementById('detC').innerHTML=`<div class="ani"><div style="display:flex;gap:9px;margin-bottom:18px"><button class="btn btn-out" onclick="go('list',null)">← Voltar</button><button class="btn btn-gold" onclick="editP('${r.id}')">✏️ Editar</button><button class="btn btn-del" onclick="delP('${r.id}')">🗑️</button></div><div class="dh"><div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px"><div><div class="dh-co">${r.company}</div><div class="dh-se">${r.sector||''} · ${r.tier||''}</div></div><span class="sbadge ${ST[r.status]?.c||''}" style="font-size:13px;padding:6px 14px">${ST[r.status]?.i} ${ST[r.status]?.l}</span></div><div class="dh-meta"><div class="dm">Decisor: <strong>${r.dm||'—'}</strong></div><div class="dm">Cargo: <strong>${r.drole||'—'}</strong></div><div class="dm">Contato: <strong>${r.ctype||'—'}</strong></div>${r.nxtDate?`<div class="dm">Próx. ação: <strong style="color:var(--gold2)">${new Date(r.nxtDate+'T12:00').toLocaleDateString('pt-BR')}</strong></div>`:''}<div class="dm">Atualizado: <strong>${since(r.ua)}</strong></div></div></div><div class="ph-grid">${phH}</div>${logH}</div>`;
+  go('detail',null);document.getElementById('pgS').textContent=r.company;
+}
+
+// REPORTS
+function renderRep(){
+  const tot=db.length,wins=db.filter(r=>r.status==='win').length,contacts=db.reduce((s,r)=>s+(r.logs||[]).length,0);
+  const sects={},scrps={},objs2={};
+  db.forEach(r=>{if(r.sector)sects[r.sector]=(sects[r.sector]||0)+1;if(r.script)scrps[r.script]=(scrps[r.script]||0)+1;(r.objs||[]).forEach(o=>objs2[o]=(objs2[o]||0)+1);});
+  document.getElementById('repC').innerHTML=`<div class="ani" style="display:grid;grid-template-columns:1fr 1fr;gap:18px">
+<div class="fsec" style="background:var(--bg3);border:1px solid var(--border2);border-radius:var(--radius);padding:22px"><div class="fsh">📊 Indicadores Gerais</div>${[['Total de Ciclos',tot],['Contatos Feitos',contacts],['Deals Fechados',wins],['Taxa de Conversão',tot?Math.round(wins/tot*100)+'%':'—'],['Em Execução',db.filter(r=>r.status==='do').length],['Em Verificação',db.filter(r=>r.status==='check').length]].map(([l,v])=>`<div style="display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--border2)"><span style="font-size:13.5px;color:var(--stone)">${l}</span><span style="font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:600">${v}</span></div>`).join('')}</div>
+<div class="fsec" style="background:var(--bg3);border:1px solid var(--border2);border-radius:var(--radius);padding:22px"><div class="fsh">🏭 Por Setor</div>${Object.entries(sects).sort((a,b)=>b[1]-a[1]).map(([s,n])=>`<div style="margin-bottom:9px"><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:3px"><span style="color:var(--stone)">${s}</span><span style="font-weight:600">${n}</span></div><div class="pbar"><div class="pbar-f" style="width:${tot?Math.round(n/tot*100):0}%;background:linear-gradient(90deg,var(--gold),var(--gold2))"></div></div></div>`).join('')||'<div style="color:var(--muted);font-size:13px">Sem dados</div>'}</div>
+<div class="fsec" style="background:var(--bg3);border:1px solid var(--border2);border-radius:var(--radius);padding:22px"><div class="fsh">📞 Scripts Mais Usados</div>${Object.entries(scrps).sort((a,b)=>b[1]-a[1]).slice(0,6).map(([s,n])=>`<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border2);font-size:13px"><span style="color:var(--stone)">${s}</span><span style="font-family:'JetBrains Mono',monospace;font-weight:600">${n}x</span></div>`).join('')||'<div style="color:var(--muted);font-size:13px">Sem dados</div>'}</div>
+<div class="fsec" style="background:var(--bg3);border:1px solid var(--border2);border-radius:var(--radius);padding:22px"><div class="fsh">🚧 Objeções Mais Frequentes</div>${Object.entries(objs2).sort((a,b)=>b[1]-a[1]).slice(0,6).map(([o,n])=>`<div style="margin-bottom:9px"><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:3px"><span style="color:var(--stone)">${o}</span><span style="color:var(--a2);font-weight:600">${n}x</span></div><div class="pbar"><div class="pbar-f" style="width:${tot?Math.round(n/tot*100):0}%;background:linear-gradient(90deg,var(--a),var(--a2))"></div></div></div>`).join('')||'<div style="color:var(--muted);font-size:13px">Sem dados</div>'}</div>
+</div>`;
+}
+
+function updateSB(){
+  const act=db.filter(r=>!['win','lost'].includes(r.status)).length,wins=db.filter(r=>r.status==='win').length;
+  const today=db.filter(r=>r.nxtDate===new Date().toISOString().slice(0,10)).length;
+  document.getElementById('sbS').innerHTML=`<div class="ms"><span class="ms-l">Ciclos ativos</span><span class="ms-v">${act}</span></div><div class="ms"><span class="ms-l">Fechamentos</span><span class="ms-v">${wins}</span></div><div class="ms"><span class="ms-l">Ações hoje</span><span class="ms-v" style="${today?'color:var(--a2)':''}">${today}</span></div>`;
+}
+function since(iso){if(!iso)return'—';const s=Math.floor((Date.now()-new Date(iso))/1000);if(s<60)return'agora';if(s<3600)return Math.floor(s/60)+'min';if(s<86400)return Math.floor(s/3600)+'h atrás';return Math.floor(s/86400)+'d atrás';}
+function toast(msg,type='ok'){const t=document.getElementById('toast');t.textContent=msg;t.className=`toast t-${type} show`;setTimeout(()=>t.classList.remove('show'),2800);}
+renderDash();updateSB();
+
+</script>
+</body>
+</html>
